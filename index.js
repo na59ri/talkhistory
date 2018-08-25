@@ -41,7 +41,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
             var result = event.message.text.match( regexp );
-            if (!Object.keys(result).length){
+            if (result || 0 < result.length){
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
