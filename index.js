@@ -49,18 +49,18 @@ function checkUserId(groupId, userId) {
 function checkUserId(groupId, userName) {
     let ret = "";
 
-    bot.getGroupMemberIds(groupId).
-        then((ids) => {
-            console.log(ids);
+    // bot.getGroupMemberIds(groupId).
+    //     then((ids) => {
+    //         console.log(ids);
 
-            // for (let id of ids) {
-            //     bot.getProfile(id).then((profile) => {
-            //         console.log(id);
-            //     });
-            // }
-            // もし、プロファイルが取れたら、ret を true にする
+    //         // for (let id of ids) {
+    //         //     bot.getProfile(id).then((profile) => {
+    //         //         console.log(id);
+    //         //     });
+    //         // }
+    //         // もし、プロファイルが取れたら、ret を true にする
 
-        })
+    //     })
 
     return ret;
 }
