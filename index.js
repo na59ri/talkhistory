@@ -22,7 +22,7 @@ server.listen(process.env.PORT || 3000);
 //     console.log(req.body);
 // });
 
-var regexp = new RegExp(/¥@.+¥n/);
+var regexp = new RegExp(/@.+/);
 
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
@@ -33,7 +33,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // イベントオブジェクトを順次処理。
     req.body.events.forEach((event) => {
-        console.log(event.type)
 
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
@@ -41,14 +40,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             console.log(event.message.text)
 
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-            // var result = event.message.text.match( regexp );
-            // if (!Object.keys(result).length){
-            //     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-            //     events_processed.push(bot.replyMessage(event.replyToken, {
-            //         type: "text",
-            //         text: result[0]
-            //     }));
-            // }
+            var result = event.message.text.match( regexp );
+            if (!Object.keys(result).length){
+                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: result[0]
+                }));
+            }
         }
     });
 
