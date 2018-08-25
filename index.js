@@ -10,6 +10,9 @@ const line_config = {
     channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 };
 
+// 返信までの時間(10 min)
+const TIMEOUT = 10 * 1000;
+
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config);
 
@@ -50,16 +53,20 @@ function checkUserId(groupId, userName) {
         then((ids) => {
             console.log(ids);
 
-            for (let id of ids) {
-                bot.getProfile(id).then((profile) => {
-                    console.log(id);
-                });
-            }
+            // for (let id of ids) {
+            //     bot.getProfile(id).then((profile) => {
+            //         console.log(id);
+            //     });
+            // }
             // もし、プロファイルが取れたら、ret を true にする
 
         })
 
     return ret;
+}
+// TODO: スタンプ送信
+function sendStamp(userId) {
+
 }
 
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
@@ -87,16 +94,22 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 }
 
                 // ユーザーからのテキストメッセージが「@ユーザー名」だった場合のみ反応。
-                const result = event.message.text.match(/@(.+)/);
+                let result = event.message.text.match(/@(.+)/);
                 if (result && 0 < result.length) {
 
                     console.log(result)
-                    // TODO: グループに追加
+
+                    // 返信がない場合に向けに、タイマーを設定
+                    let userId = checkUserId(event.source.groupId, result[1]);
+                    if (userId) {
+                        let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
+                        groupArray.groupId.userId = timeout_id;
+                    }
 
                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
-                        text: result[0]
+                        text: result[1]
                     }));
                 }
             }
