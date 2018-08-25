@@ -25,15 +25,48 @@ server.listen(process.env.PORT || 3000);
 //     console.log(req.body);
 // });
 
-// @の名前取得
-var name_time = {};
+// key : group Id
+// value : user Id / time Id array
+var groupArray = {};
 
+// TODO: ユーザーチェック関数
+function checkUserId(groupId, userId){
+    let ret = false;
 
-var regexp = new RegExp(/@(.+)/);
+    await bot.getGroupMemberProfile(groupId,userId).
+    then((profile) => {
+        console.log(profile);
+        // もし、プロファイルが取れたら、ret を true にする
+    })
+
+    return ret;
+}
+
+// TODO: ユーザーId取得
+function checkUserId(groupId, userName){
+    let ret = "";
+
+    await bot.getGroupMemberIds(groupId).
+    then((ids) => {
+        console.log(ids);
+
+        for(let id of ids){
+            await bot.getProfile(id).then((profile) => {
+                console.log(id);
+            });
+        }
+        // もし、プロファイルが取れたら、ret を true にする
+        
+    })
+
+    return ret;
+}
+
+// var regexp = new RegExp(/@(.+)/);
 
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
-    // res.sendStatus(200);
+    res.sendStatus(200);
 
     // すべてのイベント処理のプロミスを格納する配列。
     let events_processed = [];
@@ -44,11 +77,16 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
 
-            console.log(event.message.text)
+            // TODO: ユーザーが一致したら、グループから削除
+
 
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-            let result = event.message.text.match( regexp );
+            const result = event.message.text.match( /@(.+)/);
             if (result && 0 < result.length){
+
+                console.log(event)
+                // TODO: グループに追加
+
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
