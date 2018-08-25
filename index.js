@@ -84,6 +84,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             if (event.source.type == "group") {
 
+                console.log(event.source.groupId);
+                console.log(event.source.userId);
+
                 // ユーザーが一致したら、グループから削除
                 if (checkUserId(event.source.groupId, event.source.userId)) {
                     let timeout_id = groupArray.groupId.userId;
