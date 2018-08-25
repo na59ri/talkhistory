@@ -33,7 +33,7 @@ var groupArray = {};
 function checkUserId(groupId, userId){
     let ret = false;
 
-    await bot.getGroupMemberProfile(groupId,userId).
+    bot.getGroupMemberProfile(groupId,userId).
     then((profile) => {
         console.log(profile);
         // もし、プロファイルが取れたら、ret を true にする
@@ -46,12 +46,12 @@ function checkUserId(groupId, userId){
 function checkUserId(groupId, userName){
     let ret = "";
 
-    await bot.getGroupMemberIds(groupId).
+    bot.getGroupMemberIds(groupId).
     then((ids) => {
         console.log(ids);
 
         for(let id of ids){
-            await bot.getProfile(id).then((profile) => {
+            bot.getProfile(id).then((profile) => {
                 console.log(id);
             });
         }
