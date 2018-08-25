@@ -125,11 +125,16 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             }));
         } else if (event.type == "message" && event.message.type == "sticker") {
             // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-            events_processed.push(bot.replyMessage(event.replyToken, {
+            // events_processed.push(bot.replyMessage(event.replyToken, {
+            //     type: "sticker",
+            //     "packageId": event.message.packageId,
+            //     "stickerId": event.message.stickerId
+            // }));
+            bot.pushMessage(event.source.userId, {
                 type: "sticker",
-                "packageId": event.message.packageId,
-                "stickerId": event.message.stickerId
-            }));
+                packageId: event.message.packageId,
+                stickerId: event.message.stickerId
+            });
         }
     });
 
