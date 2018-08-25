@@ -30,39 +30,37 @@ server.listen(process.env.PORT || 3000);
 var groupArray = {};
 
 // TODO: ユーザーチェック関数
-function checkUserId(groupId, userId){
+function checkUserId(groupId, userId) {
     let ret = false;
 
-    bot.getGroupMemberProfile(groupId,userId).
-    then((profile) => {
-        console.log(profile);
-        // もし、プロファイルが取れたら、ret を true にする
-    })
+    bot.getGroupMemberProfile(groupId, userId).
+        then((profile) => {
+            console.log(profile);
+            // もし、プロファイルが取れたら、ret を true にする
+        })
 
     return ret;
 }
 
 // TODO: ユーザーId取得
-function checkUserId(groupId, userName){
+function checkUserId(groupId, userName) {
     let ret = "";
 
     bot.getGroupMemberIds(groupId).
-    then((ids) => {
-        console.log(ids);
+        then((ids) => {
+            console.log(ids);
 
-        for(let id of ids){
-            bot.getProfile(id).then((profile) => {
-                console.log(id);
-            });
-        }
-        // もし、プロファイルが取れたら、ret を true にする
-        
-    })
+            for (let id of ids) {
+                bot.getProfile(id).then((profile) => {
+                    console.log(id);
+                });
+            }
+            // もし、プロファイルが取れたら、ret を true にする
+
+        })
 
     return ret;
 }
-
-// var regexp = new RegExp(/@(.+)/);
 
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
@@ -75,23 +73,32 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
 
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
-        if (event.type == "message" && event.message.type == "text"){
+        if (event.type == "message" && event.message.type == "text") {
 
-            // TODO: ユーザーが一致したら、グループから削除
+            if (event.source.type == "group") {
 
+                // ユーザーが一致したら、グループから削除
+                if (checkUserId(event.source.groupId, event.source.userId)) {
+                    let timeout_id = groupArray.groupId.userId;
+                    if (timeout_id) {
+                        clearTimeout(timeout_id);
+                        delete groupArray.groupId.userId;
+                    }
+                }
 
-            // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-            const result = event.message.text.match( /@(.+)/);
-            if (result && 0 < result.length){
+                // ユーザーからのテキストメッセージが「@ユーザー名」だった場合のみ反応。
+                const result = event.message.text.match(/@(.+)/);
+                if (result && 0 < result.length) {
 
-                console.log(event)
-                // TODO: グループに追加
+                    console.log(result)
+                    // TODO: グループに追加
 
-                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: result[0]
-                }));
+                    // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                    events_processed.push(bot.replyMessage(event.replyToken, {
+                        type: "text",
+                        text: result[0]
+                    }));
+                }
             }
         }
     });
