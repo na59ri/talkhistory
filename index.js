@@ -123,6 +123,13 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 type: "text",
                 text: "まずい、もう１杯"
             }));
+        } else if (event.type == "message" && event.message.type == "sticker") {
+            // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+            events_processed.push(bot.replyMessage(event.replyToken, {
+                type: "sticker",
+                "packageId": "2",
+                "stickerId": "174"
+            }));
         }
     });
 
