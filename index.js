@@ -25,7 +25,7 @@ server.listen(process.env.PORT || 3000);
 //     console.log(req.body);
 // });
 
-var regexp = new RegExp(/@.+/);
+var regexp = new RegExp(/@.+\n/);
 
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
