@@ -25,11 +25,15 @@ server.listen(process.env.PORT || 3000);
 //     console.log(req.body);
 // });
 
-var regexp = new RegExp(/@.+\n/);
+// @の名前取得
+var name_time = {};
+
+
+var regexp = new RegExp(/@(.+)/);
 
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
-    res.sendStatus(200);
+    // res.sendStatus(200);
 
     // すべてのイベント処理のプロミスを格納する配列。
     let events_processed = [];
@@ -43,7 +47,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             console.log(event.message.text)
 
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-            var result = event.message.text.match( regexp );
+            let result = event.message.text.match( regexp );
             if (result && 0 < result.length){
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
