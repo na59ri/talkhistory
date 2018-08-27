@@ -107,7 +107,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 addUserArray(event.source.groupId, event.source.userId, event.source.displayName);
 
                 // ユーザーが一致したら、グループから削除
-                if (checkUserId(event.source.groupId, event.source.userId) !== "") {
+                if (checkUserId(event.source.groupId, event.source.userId)) {
                     let timeout_id = groupArray.groupId.userId;
                     if (timeout_id) {
                         clearTimeout(timeout_id);
@@ -123,7 +123,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                     // 返信がない場合に向けに、タイマーを設定
                     let userId = checkUserName(event.source.groupId, result[1]);
-                    if (userId) {
+                    if (userId !== "") {
                         let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
                         groupArray.groupId.userId = timeout_id;
                     }
