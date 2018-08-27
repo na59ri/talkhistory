@@ -36,14 +36,16 @@ var groupArray = {};
 function checkUserId(groupId, userId) {
     let ret = false;
 
-    bot.getGroupMemberProfile(groupId, userId).
-        then((profile) => {
-            console.log("checkUserId" + profile);
+    if (groupId && userId) {
+        bot.getGroupMemberProfile(groupId, userId).
+            then((profile) => {
+                console.log("checkUserId" + profile);
 
-            if (groupArray.groupId.userId && userId === groupArray.groupId.userId) {
-                ret = true;
-            }
-        })
+                if (groupArray.groupId.userId && userId === groupArray.groupId.userId) {
+                    ret = true;
+                }
+            })
+    }
 
     return ret;
 }
@@ -52,19 +54,21 @@ function checkUserId(groupId, userId) {
 function checkUserName(groupId, userName) {
     let ret = "";
 
-    bot.getGroupMemberIds(groupId).
-        then((ids) => {
-            console.log(ids);
+    if (groupId && userName) {
+        bot.getGroupMemberIds(groupId).
+            then((ids) => {
+                console.log(ids);
 
-            // for (let id of ids) {
-            //     bot.getProfile(id).then((profile) => {
-            //         console.log("checkUserName" + id);
-            //     });
-            // }
-            // もし、プロファイルが取れたら、ret を true にする
+                // for (let id of ids) {
+                //     bot.getProfile(id).then((profile) => {
+                //         console.log("checkUserName" + id);
+                //     });
+                // }
+                // もし、プロファイルが取れたら、ret を true にする
 
-        })
+            })
 
+    }
     return ret;
 }
 // TODO: スタンプ送信
