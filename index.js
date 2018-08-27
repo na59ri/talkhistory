@@ -37,6 +37,7 @@ var groupArray = {};
 var userArray = {};
 
 function addUserArray(groupId, userId, displayName) {
+    consloe.log("addUserArray: " + groupId + " : " + userId + " : " + displayName);
     if (groupId && userId && displayName) {
         if (!userArray.groupId.userId) {
             consloe.log("Add user: " + userArray.groupId.userId + " : " + displayName);
