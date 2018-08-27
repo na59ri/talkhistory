@@ -46,7 +46,7 @@ function checkUserId(groupId, userId) {
 }
 
 // TODO: ユーザーId取得
-function checkUserId(groupId, userName) {
+function checkUserName(groupId, userName) {
     let ret = "";
 
     // bot.getGroupMemberIds(groupId).
@@ -103,7 +103,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     console.log(result)
 
                     // 返信がない場合に向けに、タイマーを設定
-                    let userId = checkUserId(event.source.groupId, result[1]);
+                    let userId = checkUserName(event.source.groupId, result[1]);
                     if (userId) {
                         let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
                         groupArray.groupId.userId = timeout_id;
