@@ -38,9 +38,9 @@ function checkUserId(groupId, userId) {
 
     bot.getGroupMemberProfile(groupId, userId).
         then((profile) => {
-            console.log(profile);
+            console.log("checkUserId" + profile);
 
-            if (userId === groupArray.groupId.userId) {
+            if (groupArray.groupId.userId && userId === groupArray.groupId.userId) {
                 ret = true;
             }
         })
@@ -58,7 +58,7 @@ function checkUserName(groupId, userName) {
 
             for (let id of ids) {
                 bot.getProfile(id).then((profile) => {
-                    console.log(id);
+                    console.log("checkUserName" + id);
                 });
             }
             // もし、プロファイルが取れたら、ret を true にする
