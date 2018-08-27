@@ -39,7 +39,10 @@ function checkUserId(groupId, userId) {
     bot.getGroupMemberProfile(groupId, userId).
         then((profile) => {
             console.log(profile);
-            // もし、プロファイルが取れたら、ret を true にする
+
+            if (profile.userId == groupArray.groupId.userId) {
+                ret = true;
+            }
         })
 
     return ret;
@@ -49,18 +52,18 @@ function checkUserId(groupId, userId) {
 function checkUserName(groupId, userName) {
     let ret = "";
 
-    // bot.getGroupMemberIds(groupId).
-    //     then((ids) => {
-    //         console.log(ids);
+    bot.getGroupMemberIds(groupId).
+        then((ids) => {
+            console.log(ids);
 
-    //         // for (let id of ids) {
-    //         //     bot.getProfile(id).then((profile) => {
-    //         //         console.log(id);
-    //         //     });
-    //         // }
-    //         // もし、プロファイルが取れたら、ret を true にする
+            for (let id of ids) {
+                bot.getProfile(id).then((profile) => {
+                    console.log(id);
+                });
+            }
+            // もし、プロファイルが取れたら、ret を true にする
 
-    //     })
+        })
 
     return ret;
 }
