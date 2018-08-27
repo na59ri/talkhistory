@@ -37,13 +37,13 @@ var groupArray = {};
 var userArray = {};
 
 function addUserArray(groupId, userId, displayName) {
-    consloe.log("addUserArray: " + groupId + " : " + userId + " : " + displayName);
+    console.log("addUserArray: " + groupId + " : " + userId + " : " + displayName);
     if (groupId && userId && displayName) {
         if (!userArray.groupId.userId) {
-            consloe.log("Add user: " + userArray.groupId.userId + " : " + displayName);
+            console.log("Add user: " + userArray.groupId.userId + " : " + displayName);
             userArray.groupId.userId = displayName;
         } else if (userArray.groupId.userId !== displayName) {
-            consloe.log("Mod userName: " + userArray.groupId.userId + " : " + displayName);
+            console.log("Mod userName: " + userArray.groupId.userId + " : " + displayName);
             userArray.groupId.userId = displayName;
         }
     }
