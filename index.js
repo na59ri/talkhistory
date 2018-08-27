@@ -39,9 +39,10 @@ function checkUserId(groupId, userId) {
     if (groupId && userId) {
         bot.getGroupMemberProfile(groupId, userId).
             then((profile) => {
+
                 console.log("checkUserId" + profile);
 
-                if (groupArray.groupId.userId && userId === groupArray.groupId.userId) {
+                if (profile.status == 403 && groupArray.groupId.userId && userId === groupArray.groupId.userId) {
                     ret = true;
                 }
             })
