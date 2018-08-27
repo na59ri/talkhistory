@@ -32,20 +32,30 @@ server.listen(process.env.PORT || 3000);
 // value : user Id / time Id array
 var groupArray = {};
 
+// key userId 
+// value :Display name add
+var userArray = {};
+
+function addUserArray(groupId, userId, displayName) {
+    if (groupId && userId && displayName) {
+        if (!userArray.groupId.userId) {
+            consloe.log("Add user: " + userArray.groupId.userId + " : " + displayName);
+            userArray.groupId.userId = displayName;
+        } else if (userArray.groupId.userId !== displayName) {
+            consloe.log("Mod userName: " + userArray.groupId.userId + " : " + displayName);
+            userArray.groupId.userId = displayName;
+        }
+    }
+}
+
 // TODO: ユーザーチェック関数
 function checkUserId(groupId, userId) {
     let ret = false;
 
     if (groupId && userId) {
-        bot.getGroupMemberProfile(groupId, userId).
-            then((profile) => {
-
-                console.log("checkUserId" + profile);
-
-                if (profile.status == 403 && groupArray.groupId.userId && userId === groupArray.groupId.userId) {
-                    ret = true;
-                }
-            })
+        if (userArray.groupId && userArray.groupId.userId) {
+            ret = true;
+        }
     }
 
     return ret;
@@ -53,28 +63,26 @@ function checkUserId(groupId, userId) {
 
 // TODO: ユーザーId取得
 function checkUserName(groupId, userName) {
-    let ret = "";
 
     if (groupId && userName) {
-        bot.getGroupMemberIds(groupId).
-            then((ids) => {
-                console.log(ids);
-
-                // for (let id of ids) {
-                //     bot.getProfile(id).then((profile) => {
-                //         console.log("checkUserName" + id);
-                //     });
-                // }
-                // もし、プロファイルが取れたら、ret を true にする
-
-            })
+        if (userArray.groupId) {
+            for (let id of userArray.groupId) {
+                if (userArray.groupId.id === userName) {
+                    return id;
+                }
+            }
+        }
 
     }
-    return ret;
+    return "";
 }
 // TODO: スタンプ送信
 function sendStamp(userId) {
-
+    bot.pushMessage(userId, {
+        type: "sticker",
+        packageId: event.message.packageId,
+        stickerId: event.message.stickerId
+    });
 }
 
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
@@ -95,8 +103,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 console.log(event.source.groupId);
                 console.log(event.source.userId);
 
+                // groupリストにユーザーを登録
+                addUserArray(event.source.groupId, event.source.userId, event.source.displayName);
+
                 // ユーザーが一致したら、グループから削除
-                if (checkUserId(event.source.groupId, event.source.userId)) {
+                if (checkUserId(event.source.groupId, event.source.userId) !== "") {
                     let timeout_id = groupArray.groupId.userId;
                     if (timeout_id) {
                         clearTimeout(timeout_id);
