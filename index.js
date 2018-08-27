@@ -56,11 +56,11 @@ function checkUserName(groupId, userName) {
         then((ids) => {
             console.log(ids);
 
-            for (let id of ids) {
-                bot.getProfile(id).then((profile) => {
-                    console.log("checkUserName" + id);
-                });
-            }
+            // for (let id of ids) {
+            //     bot.getProfile(id).then((profile) => {
+            //         console.log("checkUserName" + id);
+            //     });
+            // }
             // もし、プロファイルが取れたら、ret を true にする
 
         })
