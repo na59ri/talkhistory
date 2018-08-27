@@ -42,8 +42,8 @@ function addUserArray(groupId, userId) {
         bot.getProfile(userId)
             .then((profile) => {
 
-                console.log("Add user: " + userArray.groupId.userId + " : " + displayName);
-                userArray.groupId.userId = displayName;
+                console.log("Add user: " + userArray.groupId.userId + " : " + profile.displayName);
+                userArray.groupId.userId = profile.displayName;
             });
     }
 }
