@@ -36,16 +36,15 @@ var groupArray = {};
 // value :Display name add
 var userArray = {};
 
-function addUserArray(groupId, userId, displayName) {
-    console.log("addUserArray: " + groupId + " : " + userId + " : " + displayName);
-    if (groupId && userId && displayName) {
-        if (!userArray.groupId.userId) {
-            console.log("Add user: " + userArray.groupId.userId + " : " + displayName);
-            userArray.groupId.userId = displayName;
-        } else if (userArray.groupId.userId !== displayName) {
-            console.log("Mod userName: " + userArray.groupId.userId + " : " + displayName);
-            userArray.groupId.userId = displayName;
-        }
+function addUserArray(groupId, userId) {
+    console.log("addUserArray: " + groupId + " : " + userId);
+    if (groupId && userId) {
+        bot.getProfile(userId)
+            .then((profile) => {
+
+                console.log("Add user: " + userArray.groupId.userId + " : " + displayName);
+                userArray.groupId.userId = displayName;
+            });
     }
 }
 
