@@ -40,7 +40,7 @@ function checkUserId(groupId, userId) {
         then((profile) => {
             console.log(profile);
 
-            if (profile.userId == groupArray.groupId.userId) {
+            if (userId === groupArray.groupId.userId) {
                 ret = true;
             }
         })
