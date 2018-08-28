@@ -41,7 +41,7 @@ function addUserArray(groupId, userId) {
     if (groupId && userId) {
         bot.getProfile(userId)
             .then((profile) => {
-
+                console.log("displayName:" + profile);
                 console.log("Add user: " + userId + " : " + profile.displayName);
                 userArray[groupId][userId] = profile.displayName;
 
