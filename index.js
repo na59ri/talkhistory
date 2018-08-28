@@ -94,9 +94,11 @@ function checkUserName(groupId, userName) {
 function sendStamp(userId) {
     console.log("sendStamp:" + userId);
     bot.pushMessage(userId, {
-        type: "sticker",
-        packageId: "1",
-        stickerId: "6"
+        // type: "sticker",
+        // packageId: "1",
+        // stickerId: "6"
+        type: "text",
+        text: "まずい、もう１杯"
     });
 }
 
