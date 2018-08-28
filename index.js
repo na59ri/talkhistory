@@ -44,8 +44,10 @@ function addUserArray(groupId, userId) {
 
                 console.log("Add user: " + userId + " : " + profile.displayName);
                 if (userArray[groupId]) {
+                    console.log("addUserArray1: " + userId + " : " + profile.displayName);
                     userArray[groupId][userId] = String(profile.displayName);
                 } else {
+                    console.log("addUserArray2: " + userId + " : " + profile.displayName);
                     userArray[groupId] = { userId: String(profile.displayName) };
                 }
             });
@@ -57,7 +59,9 @@ function checkUserId(groupId, userId) {
     let ret = false;
 
     if (groupId && userId) {
+        console.log("checkUserId1:" + groupId + " : " + userId);
         if (userArray[groupId] && userArray[groupId][userId]) {
+            console.log("checkUserId2:" + userArray[groupId][userId]);
             ret = true;
         }
     }
@@ -69,9 +73,11 @@ function checkUserId(groupId, userId) {
 function checkUserName(groupId, userName) {
 
     if (groupId && userName) {
+        console.log("checkUserName1:" + groupId + " : " + userName);
         if (userArray[groupId]) {
+            console.log("checkUserName2:" + userArray[groupId]);
             for (let id of userArray[groupId]) {
-                console.log("checkUserName:" + id + " == " + userName);
+                console.log("checkUserName3:" + id + " == " + userName);
                 if (userArray[groupId][id] === userName) {
                     return id;
                 }
@@ -83,6 +89,7 @@ function checkUserName(groupId, userName) {
 }
 // TODO: スタンプ送信
 function sendStamp(userId) {
+    console.log("sendStamp:" + userId);
     bot.pushMessage(userId, {
         type: "sticker",
         packageId: event.message.packageId,
@@ -134,8 +141,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         console.log("start timer : " + result[1]);
                         let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
                         if (groupArray[groupId]) {
+                            console.log("groupArray1 : " + groupArray[groupId]);
                             groupArray[groupId][userId] = timeout_id;
                         } else {
+                            console.log("groupArray2 : " + groupId);
                             groupArray[groupId] = { userId: timeout_id };
                         }
                     }
