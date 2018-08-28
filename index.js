@@ -46,6 +46,7 @@ function addUserArray(groupId, userId) {
                 if (userArray[groupId]) {
                     console.log("addUserArray1: " + userId + " : " + profile.displayName);
                     userArray[groupId][userId] = String(profile.displayName);
+                    console.log("addUserArray1: " + userArray[groupId][userId]);
                 } else {
                     console.log("addUserArray2: " + userId + " : " + profile.displayName);
                     userArray[groupId] = { userId: String(profile.displayName) };
@@ -79,6 +80,7 @@ function checkUserName(groupId, userName) {
             for (let id of userArray[groupId]) {
                 console.log("checkUserName3:" + id + " == " + userName);
                 if (userArray[groupId][id] === userName) {
+                    console.log("checkUserName4:" + id);
                     return id;
                 }
             }
