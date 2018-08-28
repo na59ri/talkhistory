@@ -43,7 +43,7 @@ function addUserArray(groupId, userId) {
             .then((profile) => {
                 console.log("displayName:" + profile);
                 console.log("Add user: " + userId + " : " + profile.displayName);
-                userArray[groupId][userId] = str(profile.displayName);
+                userArray[groupId][userId] = String(profile.displayName);
 
             });
     }
