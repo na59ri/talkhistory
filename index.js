@@ -101,8 +101,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             if (event.source.type == "group") {
 
-                let groupId = str(event.source.groupId);
-                let userId = str(event.source.userId);
+                let groupId = String(event.source.groupId);
+                let userId = String(event.source.userId);
 
                 // groupリストにユーザーを登録
                 addUserArray(groupId, userId);
