@@ -146,6 +146,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         } else {
                             console.log("groupArray2 : " + groupId);
                             groupArray[groupId] = { userId: timeout_id };
+                            console.log("groupArray2 : " + groupArray[groupId][userId]);
                         }
                     }
 
