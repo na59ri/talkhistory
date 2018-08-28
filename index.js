@@ -43,7 +43,7 @@ function addUserArray(groupId, userId) {
             .then((profile) => {
 
                 console.log("Add user: " + userId + " : " + profile.displayName);
-                userArray.groupId.userId = profile.displayName;
+                userArray[groupId][userId] = profile.displayName;
 
             });
     }
@@ -54,7 +54,7 @@ function checkUserId(groupId, userId) {
     let ret = false;
 
     if (groupId && userId) {
-        if (userArray.groupId && userArray.groupId.userId) {
+        if (userArray[groupId] && userArray[groupId][userId]) {
             ret = true;
         }
     }
@@ -66,9 +66,9 @@ function checkUserId(groupId, userId) {
 function checkUserName(groupId, userName) {
 
     if (groupId && userName) {
-        if (userArray.groupId) {
-            for (let id of userArray.groupId) {
-                if (userArray.groupId.id === userName) {
+        if (userArray[groupId]) {
+            for (let id of userArray[groupId]) {
+                if (userArray[groupId][id] === userName) {
                     return id;
                 }
             }
@@ -105,14 +105,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 console.log(event.source.userId);
 
                 // groupリストにユーザーを登録
-                addUserArray(event.source.groupId, event.source.userId, event.source.displayName);
+                addUserArray(event.source.groupId, event.source.userId);
 
                 // ユーザーが一致したら、グループから削除
                 if (checkUserId(event.source.groupId, event.source.userId)) {
-                    let timeout_id = groupArray.groupId.userId;
+                    let timeout_id = groupArray[groupId][userId];
                     if (timeout_id) {
                         clearTimeout(timeout_id);
-                        delete groupArray.groupId.userId;
+                        delete groupArray[groupId][userId];
                     }
                 }
 
@@ -126,7 +126,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     let userId = checkUserName(event.source.groupId, result[1]);
                     if (userId !== "") {
                         let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
-                        groupArray.groupId.userId = timeout_id;
+                        groupArray[groupId][userId] = timeout_id;
                     }
 
                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
