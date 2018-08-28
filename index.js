@@ -41,7 +41,7 @@ function addUserArray(groupId, userId) {
     if (groupId && userId) {
         bot.getProfile(userId)
             .then((profile) => {
-                console.log("displayName:" + profile);
+
                 console.log("Add user: " + userId + " : " + profile.displayName);
                 if (userArray[groupId]) {
                     userArray[groupId][userId] = String(profile.displayName);
@@ -71,6 +71,7 @@ function checkUserName(groupId, userName) {
     if (groupId && userName) {
         if (userArray[groupId]) {
             for (let id of userArray[groupId]) {
+                console.log("checkUserName:" + id + " == " + userName);
                 if (userArray[groupId][id] === userName) {
                     return id;
                 }
@@ -130,6 +131,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     // 返信がない場合に向けに、タイマーを設定
                     let userId = checkUserName(groupId, result[1]);
                     if (userId !== "") {
+                        console.log("start timer : " + result[1]);
                         let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
                         if (groupArray[groupId]) {
                             groupArray[groupId][userId] = timeout_id;
