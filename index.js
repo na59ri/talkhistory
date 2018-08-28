@@ -43,7 +43,7 @@ function addUserArray(groupId, userId) {
             .then((profile) => {
                 console.log("displayName:" + profile);
                 console.log("Add user: " + userId + " : " + profile.displayName);
-                userArray[groupId][userId] = profile.displayName;
+                userArray[groupId][userId] = str(profile.displayName);
 
             });
     }
@@ -101,14 +101,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             if (event.source.type == "group") {
 
-                console.log(event.source.groupId);
-                console.log(event.source.userId);
+                let groupId = str(event.source.groupId);
+                let userId = str(event.source.userId);
 
                 // groupリストにユーザーを登録
-                addUserArray(event.source.groupId, event.source.userId);
+                addUserArray(groupId, userId);
 
                 // ユーザーが一致したら、グループから削除
-                if (checkUserId(event.source.groupId, event.source.userId)) {
+                if (checkUserId(groupId, userId)) {
                     let timeout_id = groupArray[groupId][userId];
                     if (timeout_id) {
                         clearTimeout(timeout_id);
@@ -120,10 +120,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let result = event.message.text.match(/@(.+)/);
                 if (result && 0 < result.length) {
 
-                    console.log(result)
+                    console.log(result);
 
                     // 返信がない場合に向けに、タイマーを設定
-                    let userId = checkUserName(event.source.groupId, result[1]);
+                    let userId = checkUserName(groupId, result[1]);
                     if (userId !== "") {
                         let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
                         groupArray[groupId][userId] = timeout_id;
