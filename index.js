@@ -95,8 +95,8 @@ function sendStamp(userId) {
     console.log("sendStamp:" + userId);
     bot.pushMessage(userId, {
         type: "sticker",
-        packageId: event.message.packageId,
-        stickerId: event.message.stickerId
+        packageId: 1,
+        stickerId: 6
     });
 }
 
