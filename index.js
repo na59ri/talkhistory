@@ -43,8 +43,11 @@ function addUserArray(groupId, userId) {
             .then((profile) => {
                 console.log("displayName:" + profile);
                 console.log("Add user: " + userId + " : " + profile.displayName);
-                userArray[groupId][userId] = String(profile.displayName);
-
+                if (userArray[groupId]) {
+                    userArray[groupId][userId] = String(profile.displayName);
+                } else {
+                    userArray[groupId] = { userId: String(profile.displayName) };
+                }
             });
     }
 }
@@ -126,7 +129,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     let userId = checkUserName(groupId, result[1]);
                     if (userId !== "") {
                         let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
-                        groupArray[groupId][userId] = timeout_id;
+                        if (groupArray[groupId]) {
+                            groupArray[groupId][userId] = timeout_id;
+                        } else {
+                            groupArray[groupId] = { userId: timeout_id };
+                        }
                     }
 
                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
