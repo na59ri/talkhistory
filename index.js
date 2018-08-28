@@ -112,10 +112,12 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                 // ユーザーが一致したら、グループから削除
                 if (checkUserId(groupId, userId)) {
-                    let timeout_id = groupArray[groupId][userId];
-                    if (timeout_id) {
-                        clearTimeout(timeout_id);
-                        delete groupArray[groupId][userId];
+                    if (groupArray[groupId] && groupArray[groupId][userId]) {
+                        let timeout_id = groupArray[groupId][userId];
+                        if (timeout_id) {
+                            clearTimeout(timeout_id);
+                            delete groupArray[groupId][userId];
+                        }
                     }
                 }
 
