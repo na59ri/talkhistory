@@ -49,9 +49,11 @@ function addUserArray(groupId, userId) {
                     console.log("addUserArray1: " + userArray[groupId][userId]);
                 } else {
                     console.log("addUserArray2: " + userId + " : " + profile.displayName);
-                    userArray[groupId] = { userId: String(profile.displayName) };
-                    console.log("addUserArray2: " + userArray[groupId][userId]);
+                    userArray[groupId] = {};
+                    userArray[groupId][userId] = String(profile.displayName);
                 }
+                console.log("addUserArray2: " + userArray[groupId][userId]);
+
             });
     }
 }
@@ -94,9 +96,6 @@ function checkUserName(groupId, userName) {
 function sendStamp(userId) {
     console.log("sendStamp:" + userId);
     bot.pushMessage(userId, {
-        // type: "sticker",
-        // packageId: "1",
-        // stickerId: "6"
         type: "text",
         text: "まずい、もう１杯"
     });
@@ -150,7 +149,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             groupArray[groupId][userId] = timeout_id;
                         } else {
                             console.log("groupArray2 : " + groupId);
-                            groupArray[groupId] = { userId: timeout_id };
+                            groupArray[groupId] = {};
+                            groupArray[groupId][userId] = timeout_id;
                             console.log("groupArray2 : " + groupArray[groupId][userId]);
                         }
                     }
