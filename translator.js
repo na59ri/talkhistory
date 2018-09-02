@@ -3,7 +3,7 @@
 var LanguageTranslatorV3 = require('watson-developer-cloud/language-translator/v3');
 
 var languageTranslator = new LanguageTranslatorV3({
-    version: '{2018-05-01}',
+    version: '2018-05-01',
     iam_apikey: process.env.TRANSLAOTR_API_KEY,
     url: 'https://gateway.watsonplatform.net/language-translator/api'
 });
