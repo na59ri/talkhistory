@@ -1,4 +1,3 @@
-
 // クラス取得
 var LanguageTranslatorV3 = require('watson-developer-cloud/language-translator/v3');
 
@@ -11,7 +10,7 @@ var languageTranslator = new LanguageTranslatorV3({
 module.exports.translator = translator;
 
 
-async function translator(text, func) {
+async function translator(text, analyzer) {
 
     var parameters = {
         text: text,
@@ -29,7 +28,7 @@ async function translator(text, func) {
                 console.log(response.translations[0].translation);
                 if (response.translations) {
 
-                    func(String(response.translations[0].traslation));
+                    analyzer(String(response.translations[0].traslation));
                 }
             }
         }

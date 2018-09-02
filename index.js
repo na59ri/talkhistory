@@ -139,7 +139,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let result = event.message.text.match(/@(.+)[ ]*[\n|\r]+(.+)/);
                 if (result && 0 < result.length) {
                     console.log(result);
-                    translator.translator(result[2], tone.tone);
+                    translator.translator(result[2], tone.analyzer.bind(tone));
 
                     // 返信がない場合に向けに、タイマーを設定
                     let userId = checkUserName(groupId, result[1]);
