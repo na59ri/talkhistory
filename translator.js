@@ -29,7 +29,7 @@ async function translator(text, analyzer) {
                 console.log(typeof (returnVal) + " : " + response.translations[0].translation);
                 if (response.translations) {
                     // console.log(String(response.translations[0].traslation));
-                    analyzer("Harry check email address!!!");
+                    analyzer(new String(response.translations[0].translation));
                     // analyzer(response.translations[0].traslation);
                 }
             }
