@@ -25,8 +25,10 @@ async function translator(text, func) {
                 console.log(error)
             }
             else {
-                console.log(JSON.stringify(response, null, 2));
+                // console.log(JSON.stringify(response, null, 2));
+                console.log(response.translations.traslation)
                 if (response.translations) {
+
                     func(response.translations.traslation);
                 }
             }
