@@ -11,7 +11,7 @@ var languageTranslator = new LanguageTranslatorV3({
 module.exports.translator = translator;
 
 
-async function translator(text) {
+async function translator(text, func) {
 
     var parameters = {
         text: text,
@@ -27,11 +27,10 @@ async function translator(text) {
             else {
                 console.log(JSON.stringify(response, null, 2));
                 if (response.translations) {
-                    return response.translations.traslation;
+                    func(response.translations.traslation);
                 }
             }
         }
     );
 
-    return "";
 }

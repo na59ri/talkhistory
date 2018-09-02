@@ -3,6 +3,7 @@
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 const translator = require("./translator");
+const tone = require("./tone");
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -102,7 +103,7 @@ function sendStamp(userId) {
     });
 }
 
-server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => async function{
+server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
     res.sendStatus(200);
 
@@ -138,8 +139,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => as
                 let result = event.message.text.match(/@(.+)[ ]*[\n|\r]+(.+)/);
                 if (result && 0 < result.length) {
                     console.log(result);
-                    let trans = await translator.translator(result[2]);
-                    console.log(trans);
+                    translator.translator(result[2], tone.tone);
 
                     // 返信がない場合に向けに、タイマーを設定
                     let userId = checkUserName(groupId, result[1]);
