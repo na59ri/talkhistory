@@ -26,10 +26,10 @@ async function translator(text, func) {
             }
             else {
                 // console.log(JSON.stringify(response, null, 2));
-                console.log(response.translations.traslation)
+                console.log(response.translations[0].translation);
                 if (response.translations) {
 
-                    func(response.translations.traslation);
+                    func(response.translations[0].traslation);
                 }
             }
         }
