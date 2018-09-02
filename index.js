@@ -102,7 +102,7 @@ function sendStamp(userId) {
     });
 }
 
-server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
+server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => async function{
     // 先行してLINE側にステータスコード200でレスポンスする。
     res.sendStatus(200);
 
