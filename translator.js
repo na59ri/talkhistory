@@ -27,8 +27,9 @@ async function translator(text, analyzer) {
                 // console.log(JSON.stringify(response, null, 2));
                 console.log(response.translations[0].translation);
                 if (response.translations) {
-                    console.log(String(response.translations[0].traslation));
+                    // console.log(String(response.translations[0].traslation));
                     // analyzer(String(response.translations[0].traslation));
+                    analyzer(response.translations[0].traslation);
                 }
             }
         }
