@@ -135,10 +135,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 }
 
                 // ユーザーからのテキストメッセージが「@ユーザー名」だった場合のみ反応。
-                let result = event.message.text.match(/@(.+)[ ]*[\\n]*(.+)/);
+                let result = event.message.text.match(/@(.+)[ ]*[\\n]+(.+)/);
                 if (result && 0 < result.length) {
                     console.log(result);
-                    translator(result[0]);
+                    translator.translator(result[0]);
 
                     // 返信がない場合に向けに、タイマーを設定
                     let userId = checkUserName(groupId, result[1]);
