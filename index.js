@@ -161,7 +161,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         // text: result[1]
-                        text: "コメント谷尾"
+                        text: "テスト中です、すまそ"
                     }));
                 }
             }
