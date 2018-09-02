@@ -15,6 +15,8 @@ function toneAna(text) {
         'content_type': 'application/json'
     };
 
+    console.log("tone start:" + toneParams.tone_input.text);
+
     toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
         if (error) {
             console.log(error);
