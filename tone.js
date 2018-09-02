@@ -7,9 +7,9 @@ var toneAnalyzer = new ToneAnalyzerV3({
     url: 'https://gateway.watsonplatform.net/tone-analyzer/api'
 });
 
-module.exports.tone = toneAnalyzer;
+module.exports.tone = toneAna;
 
-function toneAnalyzer(text) {
+function toneAna(text) {
     let toneParams = {
         'tone_input': { 'text': text },
         'content_type': 'application/json'
