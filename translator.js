@@ -29,7 +29,7 @@ async function translator(text, func) {
                 console.log(response.translations[0].translation);
                 if (response.translations) {
 
-                    func(response.translations[0].traslation);
+                    func(String(response.translations[0].traslation));
                 }
             }
         }
