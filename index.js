@@ -135,7 +135,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 }
 
                 // ユーザーからのテキストメッセージが「@ユーザー名」だった場合のみ反応。
-                let result = event.message.text.match(/@(.+)[ ]*[\\n]+(.+)/);
+                let result = event.message.text.match(/@(.+)[ ]*[\n]+(.+)/);
                 if (result && 0 < result.length) {
                     console.log(result);
                     translator.translator(result[2]);
