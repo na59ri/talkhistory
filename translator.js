@@ -24,13 +24,10 @@ async function translator(text, analyzer) {
                 console.log(error)
             }
             else {
-                // console.log(JSON.stringify(response, null, 2));
                 let returnVal = response.translations[0].translation;
                 console.log(typeof (returnVal) + " : " + response.translations[0].translation);
                 if (response.translations) {
-                    // console.log(String(response.translations[0].traslation));
                     analyzer(new String(response.translations[0].translation));
-                    // analyzer(response.translations[0].traslation);
                 }
             }
         }

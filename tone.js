@@ -24,7 +24,7 @@ function analyzer(text) {
         if (error) {
             console.log(error);
         } else {
-            console.log("tone" + JSON.stringify(toneAnalysis, null, 2));
+            console.log(JSON.stringify(toneAnalysis, null, 2));
         }
     });
 }
