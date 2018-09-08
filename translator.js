@@ -10,7 +10,7 @@ var languageTranslator = new LanguageTranslatorV3({
 module.exports.translator = translator;
 
 
-async function translator(text, analyzer) {
+async function translator(groupId, name, text, analyzer) {
 
     var parameters = {
         text: text,
@@ -27,7 +27,7 @@ async function translator(text, analyzer) {
                 let returnVal = response.translations[0].translation;
                 console.log(typeof (returnVal) + " : " + response.translations[0].translation);
                 if (response.translations) {
-                    analyzer(new String(response.translations[0].translation));
+                    analyzer(groupId, name, new String(response.translations[0].translation));
                 }
             }
         }

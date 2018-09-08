@@ -1,4 +1,5 @@
 var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+const kintone = require("./kintone");
 
 var toneAnalyzer = new ToneAnalyzerV3({
     version: '2017-09-21',
@@ -9,7 +10,32 @@ var toneAnalyzer = new ToneAnalyzerV3({
 
 module.exports.analyzer = analyzer;
 
-function analyzer(text) {
+// groupId と name を使って kintone から情報を取得
+function getNameRecord(groupId, name, successFunc, failFunc) {
+    console.log("getNameRecord: " + groupId + " : " + name);
+
+    let query = "\"_groupId = " + groupId + " AND _name = " + name + "\"";
+    kintone.sendRecord("GET", {
+        "query": query,
+        "fields": ["$id", "_timerId", "_tone"]
+    }, successFunc, failFunc);
+}
+
+// recordId に対して、 name を更新
+function updateTone(id, tone) {
+
+    kintone.sendRecord("PUT", {
+        "ids": [id],
+        "record": {
+            "_tone": {
+                "value": tone
+            }
+        }
+    });
+}
+
+
+function analyzer(groupId, name, text) {
 
 
     console.log("tone start:" + text);
@@ -19,12 +45,21 @@ function analyzer(text) {
         'content_type': 'application/json'
     };
 
+    getNameRecord(groupId, name, function (data) {
+        if (data.record) {
+            let id = String(data.records[i].record_id.value);
 
-    toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log(JSON.stringify(toneAnalysis, null, 2));
+            toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(JSON.stringify(toneAnalysis, null, 2));
+                    if (toneAnalysis.document_tone) {
+                        updateTone(id, toneAnalysis.document_tone.tones[0].tone_id);
+                    }
+                }
+            });
         }
     });
+
 }

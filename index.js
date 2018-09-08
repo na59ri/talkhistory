@@ -4,6 +4,7 @@ const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 const translator = require("./translator");
 const tone = require("./tone");
+const kintone = require("./kintone");
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -38,6 +39,47 @@ var groupArray = {};
 // value :Display name add
 var userArray = {};
 
+// groupId と userId を使って kintone から情報を取得
+function getIdRecord(groupId, userId, successFunc, failFunc) {
+    console.log("getIdRecord: " + groupId + " : " + userId);
+
+    let query = "\"_groupId = " + groupId + " AND _userId = " + userId + "\"";
+    kintone.sendRecord("GET", {
+        "query": query,
+        "fields": ["$id", "_timerId", "_tone"]
+    }, successFunc, failFunc);
+}
+
+// groupId と name を使って kintone から情報を取得
+function getNameRecord(groupId, name, successFunc, failFunc) {
+    console.log("getNameRecord: " + groupId + " : " + name);
+
+    let query = "\"_groupId = " + groupId + " AND _name = " + name + "\"";
+    kintone.sendRecord("GET", {
+        "query": query,
+        "fields": ["$id", "_timerId", "_tone"]
+    }, successFunc, failFunc);
+}
+
+// GroupId, UserId, name を kintone に保存
+function addUser(groupId, userId, name) {
+    kintone.sendRecord("POST", { "record": { "_groupId": { "value": groupId }, "_userId": { "value": userId }, "_name": { "value": name } } });
+}
+
+// recordId に対して、 name を更新
+function addUserName(id, name) {
+
+    kintone.sendRecord("PUT", {
+        "ids": [id],
+        "record": {
+            "_name": {
+                "value": name
+            }
+        }
+    });
+}
+
+// GroupId, UserId, displayName を kintone に保存
 function addUserArray(groupId, userId) {
     console.log("addUserArray: " + groupId + " : " + userId);
     if (groupId && userId) {
@@ -45,63 +87,114 @@ function addUserArray(groupId, userId) {
             .then((profile) => {
 
                 console.log("Add user: " + userId + " : " + profile.displayName);
-                if (userArray[groupId]) {
-                    console.log("addUserArray1: " + userId + " : " + profile.displayName);
-                    userArray[groupId][userId] = String(profile.displayName);
-                    console.log("addUserArray1: " + userArray[groupId][userId]);
-                } else {
-                    console.log("addUserArray2: " + userId + " : " + profile.displayName);
-                    userArray[groupId] = {};
-                    userArray[groupId][userId] = String(profile.displayName);
-                }
-                console.log("addUserArray2: " + userArray[groupId][userId]);
-
+                getIdRecord(groupId, userId, function (data) {
+                    console.log("addUser Array OK");
+                    if (data.records) {
+                        for (let i in data.records) {
+                            let id = String(data.records[i].record_id.value);
+                            addUserName(id, profile.displayName);
+                        }
+                    } else {
+                        addUser(groupId, userId, profile.displayName);
+                    }
+                });
             });
     }
 }
 
-// TODO: ユーザーチェック関数
-function checkUserId(groupId, userId) {
-    let ret = false;
-
-    if (groupId && userId) {
-        console.log("checkUserId1:" + groupId + " : " + userId);
-        if (userArray[groupId] && userArray[groupId][userId]) {
-            console.log("checkUserId2:" + userArray[groupId][userId]);
-            ret = true;
-        }
-    }
-
-    return ret;
-}
-
-// TODO: ユーザーId取得
-function checkUserName(groupId, userName) {
-
-    if (groupId && userName) {
-        console.log("checkUserName1:" + groupId + " : " + userName);
-        if (userArray[groupId]) {
-            console.log("checkUserName2:" + userArray[groupId]);
-            for (let id in userArray[groupId]) {
-                console.log("checkUserName3:" + id + " == " + userName);
-                if (userArray[groupId][id] === userName) {
-                    console.log("checkUserName4:" + id);
-                    return id;
+// UserのtimerId/toneを削除する
+function deleteTimerSuccess(data) {
+    for (let i in data.records) {
+        let id = String(data.records[i].record_id.value);
+        console.log(id + " : " + timerId);
+        clearTimeout(timerId);
+        kintone.sendRecord("PUT", {
+            "ids": [id],
+            "record": {
+                "_timerId": {
+                    "value": ""
+                },
+                "_tone": {
+                    "value": ""
                 }
             }
-        }
-
+        });
     }
-    return "";
 }
-// TODO: スタンプ送信
-function sendStamp(userId) {
-    console.log("sendStamp:" + userId);
-    bot.pushMessage(userId, {
-        type: "text",
-        text: "まずい、もう１杯"
+
+
+function deleteUser(groupId, name) {
+    getIdRecord(groupId, name, deleteTimerSuccess);
+}
+
+function updateTimerId(id, timerId) {
+    kintone.sendRecord("PUT", {
+        "ids": [id],
+        "record": {
+            "_timerId": {
+                "value": timerId
+            }
+        }
     });
 }
+
+// スタンプ
+function toneTypeReply(tone) {
+    let text = "早く返信ちょうだい！早く早く";
+    if (tone === 'anger') {
+        text = "はよ、返信しやがれ！";
+    } else if (tone === 'fear') {
+        text = "早く返信ほしいなあ";
+    } else if (tone === 'joy') {
+        text = "返信ようよ！";
+    } else if (tone === 'sadness') {
+        text = "お願いだから、返信して";
+    } else if (tone === 'analytical') {
+        text = "早く返信ちょうだい！";
+    } else if (tone === 'confident') {
+        text = "まじで、返信して";
+    } else if (tone === 'tentative') {
+        text = "えーーーと、返信ほしいなあ";
+    }
+
+    return text;
+}
+
+// TODO: スタンプ送信
+function sendStamp(recordId) {
+    console.log("sendStamp:" + recordId);
+    sendRecord("GET", { "id": recordId }, function (data) {
+        if (data.records) {
+
+            bot.pushMessage(String(data.records[0]._userId.value), {
+                type: "text",
+                text: toneTypeReply(String(data.records[0]._tone.value))
+            });
+            updateTimerId(recordId, setTimeout(sendStamp(recordId), TIMEOUT));
+        }
+    });
+}
+
+function updateUserSuccess(data) {
+    for (let i in data.records) {
+        let id = String(data.records[i].record_id.value);
+        let timerId = String(data.records[i].record_id.value);
+        console.log("updateUserSuccess : " + id + " : " + timerId);
+
+        if (!timerId) {
+            let newTimerId = setTimeout(sendStamp(id), TIMEOUT);
+            console.log("updateUserSuccess update: " + newTimerId);
+            updateTimerId(id, newTimerId);
+
+        }
+    }
+}
+
+function updateUser(groupId, name) {
+    getNameRecord(groupId, name, updateUserSuccess);
+}
+
+
 
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
@@ -125,37 +218,16 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 addUserArray(groupId, userId);
 
                 // ユーザーが一致したら、グループから削除
-                if (checkUserId(groupId, userId)) {
-                    if (groupArray[groupId] && groupArray[groupId][userId]) {
-                        let timeout_id = groupArray[groupId][userId];
-                        if (timeout_id) {
-                            clearTimeout(timeout_id);
-                            delete groupArray[groupId][userId];
-                        }
-                    }
-                }
+                deleteUser(groupId, userId);
 
                 // ユーザーからのテキストメッセージが「@ユーザー名」だった場合のみ反応。
                 let result = event.message.text.match(/@(.+)[ ]*[\n|\r]+(.+)/);
                 if (result && 0 < result.length) {
                     console.log(result);
-                    translator.translator(result[2], tone.analyzer);
+                    translator.translator(groupId, result[1], result[2], tone.analyzer);
 
                     // 返信がない場合に向けに、タイマーを設定
-                    let userId = checkUserName(groupId, result[1]);
-                    if (userId !== "") {
-                        console.log("start timer : " + result[1]);
-                        let timeout_id = setTimeout(sendStamp(userId), TIMEOUT);
-                        if (groupArray[groupId]) {
-                            console.log("groupArray1 : " + groupArray[groupId]);
-                            groupArray[groupId][userId] = timeout_id;
-                        } else {
-                            console.log("groupArray2 : " + groupId);
-                            groupArray[groupId] = {};
-                            groupArray[groupId][userId] = timeout_id;
-                            console.log("groupArray2 : " + groupArray[groupId][userId]);
-                        }
-                    }
+                    updateUser(groupId, result[2]);
 
                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                     events_processed.push(bot.replyMessage(event.replyToken, {
