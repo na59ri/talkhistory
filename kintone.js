@@ -102,7 +102,7 @@ function getRecord(param, successFunction, failFunction) {
         } else {
             // error
             console.log("[getRecord] error : " + req.responseText);
-            failFunction(JSON.parse(req.responseText));
+            failFunction();
         }
     };
 
