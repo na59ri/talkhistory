@@ -3,6 +3,7 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var apiToken = process.env.KINTONE_API_TOKEN;
 var appId = 1;
 var url = 'https://devphtpgt.cybozu.com/k/v1/record.json';
+var urls = 'https://devphtpgt.cybozu.com/k/v1/records.json';
 
 module.exports.sendRecord = sendRecord;
 module.exports.getRecord = getRecord;
@@ -32,17 +33,17 @@ function createCORSRequest(method) {
 
 // Get XMLHttpRequest instance
 function createCORSRequestParam(method, param) {
-    console.log("[createCORSRequest] " + new String(url + param))
+    console.log("[createCORSRequest] " + new String(urls + param))
     var xhr = new XMLHttpRequest();
     if ("withCredentials" in xhr) {
         // Check if the XMLHttpRequest object has a "withCredentials" property.
         // "withCredentials" only exists on XMLHTTPRequest2 objects.
-        xhr.open(method, new String(url + param), true);
+        xhr.open(method, new String(urls + param), true);
     } else if (typeof XDomainRequest != "undefined") {
         // Otherwise, check if XDomainRequest.
         // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
         xhr = new XDomainRequest();
-        xhr.open(method, new String(url + param));
+        xhr.open(method, new String(urls + param));
     } else {
         // Otherwise, CORS is not supported by the browser.
         xhr = null;
