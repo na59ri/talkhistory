@@ -1,3 +1,4 @@
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var apiToken = process.env.KINTONE_API_TOKEN;
 var appId = 1;
