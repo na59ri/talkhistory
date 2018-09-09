@@ -87,7 +87,7 @@ function addUserArray(groupId, userId) {
             .then((profile) => {
 
                 console.log("Add user: " + userId + " : " + profile.displayName);
-                addUser(String(groupId), String(userId), String(profile.displayName);
+                addUser(String(groupId), String(userId), String(profile.displayName));
 
                 // getIdRecord(groupId, userId, function (data) {
                 //     console.log("addUser Array OK");
