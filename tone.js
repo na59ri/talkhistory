@@ -47,7 +47,7 @@ function analyzer(groupId, name, text) {
 
     getNameRecord(groupId, name, function (data) {
         if (data.record) {
-            let id = String(data.records[i].record_id.value);
+            let id = new String(data.records[i].record_id.value);
 
             toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
                 if (error) {
@@ -55,7 +55,7 @@ function analyzer(groupId, name, text) {
                 } else {
                     console.log(JSON.stringify(toneAnalysis, null, 2));
                     if (toneAnalysis.document_tone) {
-                        updateTone(id, toneAnalysis.document_tone.tones[0].tone_id);
+                        updateTone(id, new String(toneAnalysis.document_tone.tones[0].tone_id));
                     }
                 }
             });

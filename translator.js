@@ -12,7 +12,7 @@ module.exports.translator = translator;
 
 async function translator(groupId, name, text, analyzer) {
 
-    var parameters = {
+    let parameters = {
         text: text,
         model_id: 'ja-en'
     };
@@ -27,7 +27,7 @@ async function translator(groupId, name, text, analyzer) {
                 let returnVal = response.translations[0].translation;
                 console.log(typeof (returnVal) + " : " + response.translations[0].translation);
                 if (response.translations) {
-                    analyzer(groupId, name, new String(response.translations[0].translation));
+                    analyzer(new String(groupId), new String(name), new String(response.translations[0].translation));
                 }
             }
         }
