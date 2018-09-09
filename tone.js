@@ -1,4 +1,5 @@
 var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+const querystring = require("querystring");
 const kintone = require("./kintone");
 
 var toneAnalyzer = new ToneAnalyzerV3({
@@ -15,9 +16,10 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("getNameRecord: " + groupId + " : " + name);
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
-    kintone.sendRecord("GET", {
-        "query": query
-    }, successFunc, failFunc);
+    // kintone.sendRecord("GET", {
+    //     "query": query
+    // }, successFunc, failFunc);
+    kintone.getRecord("query=" + querystring.stringify(query), successFunc, failFunc);
 }
 
 // recordId に対して、 name を更新

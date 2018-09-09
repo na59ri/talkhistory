@@ -2,6 +2,7 @@
 // モジュールのインポート
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
+const querystring = require("querystring");
 const translator = require("./translator");
 const tone = require("./tone");
 const kintone = require("./kintone");
@@ -44,9 +45,10 @@ function getIdRecord(groupId, userId, successFunc, failFunc) {
     console.log("getIdRecord: " + groupId + " : " + userId);
 
     let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
-    kintone.sendRecord("GET", {
-        "query": query
-    }, successFunc, failFunc);
+    // kintone.sendRecord("GET", {
+    //     "query": query
+    // }, successFunc, failFunc);
+    kintone.getRecord("query=" + querystring.stringify(query), successFunc, failFunc);
 }
 
 // groupId と name を使って kintone から情報を取得
@@ -54,9 +56,10 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("getNameRecord: " + groupId + " : " + name);
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
-    kintone.sendRecord("GET", {
-        "query": query
-    }, successFunc, failFunc);
+    // kintone.sendRecord("GET", {
+    //     "query": query
+    // }, successFunc, failFunc);
+    kintone.getRecord("query=" + querystring.stringify(query), successFunc, failFunc);
 }
 
 // GroupId, UserId, name を kintone に保存
