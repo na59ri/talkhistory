@@ -87,17 +87,19 @@ function addUserArray(groupId, userId) {
             .then((profile) => {
 
                 console.log("Add user: " + userId + " : " + profile.displayName);
-                getIdRecord(groupId, userId, function (data) {
-                    console.log("addUser Array OK");
-                    if (data.records) {
-                        for (let i in data.records) {
-                            let id = String(data.records[i].record_id.value);
-                            addUserName(id, profile.displayName);
-                        }
-                    } else {
-                        addUser(groupId, userId, profile.displayName);
-                    }
-                });
+                addUser(groupId, userId, profile.displayName);
+
+                // getIdRecord(groupId, userId, function (data) {
+                //     console.log("addUser Array OK");
+                //     if (data.records) {
+                //         for (let i in data.records) {
+                //             let id = String(data.records[i].record_id.value);
+                //             addUserName(id, profile.displayName);
+                //         }
+                //     } else {
+                //         addUser(groupId, userId, profile.displayName);
+                //     }
+                // });
             });
     }
 }
