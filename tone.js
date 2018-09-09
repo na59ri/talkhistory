@@ -48,7 +48,7 @@ function analyzer(groupId, name, text) {
     };
 
     getNameRecord(groupId, name, function (data) {
-        console.log("[analyzer][getNameRecord] success : " + data);
+        console.log("[analyzer][getNameRecord] success : " + JSON.stringify(data));
         if (data.record) {
             let id = new String(data.records[i].record_id.value);
 
@@ -64,6 +64,5 @@ function analyzer(groupId, name, text) {
             });
         }
     },
-        console.log("[analyzer][getNameRecord] success : " + data););
-
+        function (data) { console.log("[analyzer][getNameRecord] fail"); });
 }
