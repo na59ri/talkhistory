@@ -45,9 +45,9 @@ function sendRecord(method, json, successFunction, failFunction) {
             successFunction(JSON.parse(req.responseText));
         } else {
             // error
-            console.log("error : " + method);
+            console.log("error : " + method + " : " + req.responseText);
             // console.log(JSON.parse(req.responseText));
-            // failFunction(JSON.parse(req.responseText));
+            failFunction(req.responseText);
         }
     };
 
