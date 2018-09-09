@@ -32,7 +32,9 @@ function createCORSRequest(method) {
 
 // Send kintone recode
 function sendRecord(method, json, successFunction, failFunction) {
-    console.log(url + ' : ' + apiToken);
+
+    // console.log(url + ' : ' + apiToken);
+    console.log("[sendRecord] start method : " + method);
     req = createCORSRequest(method);
     if (!req) {
         throw new Error('CORS not supported');
@@ -41,13 +43,13 @@ function sendRecord(method, json, successFunction, failFunction) {
     req.onload = function () {
         if (req.status === 200) {
             // success
-            console.log(JSON.parse(req.responseText));
+            console.log("[sendRecord] success :" + JSON.parse(req.responseText));
             successFunction(JSON.parse(req.responseText));
         } else {
             // error
-            console.log("error : " + method + " : " + req.responseText);
+            console.log("[sendRecord] error : " + method + " : " + req.responseText);
             // console.log(JSON.parse(req.responseText));
-            // failFunction(req.responseText);
+            failFunction(req.responseText);
         }
     };
 
@@ -57,6 +59,8 @@ function sendRecord(method, json, successFunction, failFunction) {
     }
 
     req.setRequestHeader('X-Cybozu-API-Token', apiToken);
+
+    console.log("[sendRecord] method : " + method + ", " + JSON.stringify(json));
     req.send(JSON.stringify(json));
 }
 
