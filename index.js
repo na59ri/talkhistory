@@ -45,8 +45,7 @@ function getIdRecord(groupId, userId, successFunc, failFunc) {
 
     let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
     kintone.sendRecord("GET", {
-        "query": query,
-        "fields": ["$id", "timerId", "tone"]
+        "query": query
     }, successFunc, failFunc);
 }
 
@@ -56,8 +55,7 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
     kintone.sendRecord("GET", {
-        "query": query,
-        "fields": ["$id", "timerId", "tone"]
+        "query": query
     }, successFunc, failFunc);
 }
 
