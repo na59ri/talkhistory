@@ -42,12 +42,13 @@ var userArray = {};
 
 // groupId と userId を使って kintone から情報を取得
 function getIdRecord(groupId, userId, successFunc, failFunc) {
-    console.log("getIdRecord: " + groupId + " : " + userId);
 
     let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
     // kintone.sendRecord("GET", {
     //     "query": query
     // }, successFunc, failFunc);
+    console.log("[getIdRecord] " + "query=" + querystring.stringify(query));
+
     kintone.getRecord("query=" + querystring.stringify(query), successFunc, failFunc);
 }
 
@@ -56,9 +57,12 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("getNameRecord: " + groupId + " : " + name);
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
+
     // kintone.sendRecord("GET", {
     //     "query": query
     // }, successFunc, failFunc);
+    console.log("[getNameRecord] " + "query=" + querystring.stringify(query));
+
     kintone.getRecord("query=" + querystring.stringify(query), successFunc, failFunc);
 }
 
