@@ -113,7 +113,7 @@ function getRecord(param, successFunction, failFunction) {
 }
 
 // Send kintone recode
-function getRecord2(method, json, successFunction, failFunction) {
+function getURLSRecord(method, json, successFunction, failFunction) {
 
     // console.log(url + ' : ' + apiToken);
     console.log("[sendRecord] start method : " + method);
