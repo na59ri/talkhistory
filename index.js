@@ -63,7 +63,10 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
 
 // GroupId, UserId, name を kintone に保存
 function addUser(groupId, userId, name) {
-    kintone.sendRecord("POST", { "record": { "_groupId": { "value": groupId }, "_userId": { "value": userId }, "_name": { "value": name } } });
+    kintone.sendRecord("POST",
+        { "record": { "_groupId": { "value": groupId }, "_userId": { "value": userId }, "_name": { "value": name } } },
+        function (data) { },
+        function (data) { });
 }
 
 // recordId に対して、 name を更新
@@ -76,7 +79,9 @@ function addUserName(id, name) {
                 "value": name
             }
         }
-    });
+    },
+        function (data) { },
+        function (data) { });
 }
 
 // GroupId, UserId, displayName を kintone に保存
@@ -86,20 +91,23 @@ function addUserArray(groupId, userId) {
         bot.getProfile(userId)
             .then((profile) => {
 
-                console.log("Add user: " + userId + " : " + profile.displayName);
-                addUser(String(groupId), String(userId), String(profile.displayName));
+                let sGroupId = String(groupId);
+                let sUserId = String(userId);
+                let sDisplayName = String(profile.displayName);
 
-                // getIdRecord(groupId, userId, function (data) {
-                //     console.log("addUser Array OK");
-                //     if (data.records) {
-                //         for (let i in data.records) {
-                //             let id = String(data.records[i].record_id.value);
-                //             addUserName(id, profile.displayName);
-                //         }
-                //     } else {
-                //         addUser(groupId, userId, profile.displayName);
-                //     }
-                // });
+                getIdRecord(sGroupId, sUserId, function (data) {
+                    console.log("addUser Array OK");
+                    if (data.records) {
+                        for (let i in data.records) {
+                            let id = String(data.records[i].record_id.value);
+                            addUserName(id, sDisplayName);
+                        }
+                    } else {
+
+                    }
+                }, function (data) {
+                    addUser(sGroupId, sUserId, sDisplayName);
+                });
             });
     }
 }
@@ -126,7 +134,7 @@ function deleteTimerSuccess(data) {
 
 
 function deleteUser(groupId, name) {
-    getIdRecord(groupId, name, deleteTimerSuccess);
+    getIdRecord(groupId, name, deleteTimerSuccess, function (data) { });
 }
 
 function updateTimerId(id, timerId) {
@@ -193,7 +201,7 @@ function updateUserSuccess(data) {
 }
 
 function updateUser(groupId, name) {
-    getNameRecord(groupId, name, updateUserSuccess);
+    getNameRecord(groupId, name, updateUserSuccess, function (data) { });
 }
 
 
