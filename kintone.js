@@ -57,7 +57,7 @@ function sendRecord(method, json, successFunction, failFunction) {
     }
 
     req.setRequestHeader('X-Cybozu-API-Token', apiToken);
-    req.send(JSON.stringify(json);
+    req.send(JSON.stringify(json));
 }
 
 // Get kintone recode
