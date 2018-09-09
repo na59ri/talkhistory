@@ -112,6 +112,42 @@ function getRecord(param, successFunction, failFunction) {
     req.send();
 }
 
+// Send kintone recode
+function getRecord2(method, json, successFunction, failFunction) {
+
+    // console.log(url + ' : ' + apiToken);
+    console.log("[sendRecord] start method : " + method);
+    let xhr = new XMLHttpRequest();
+    req = xhr.open(method, urls, true);
+
+    if (!req) {
+        throw new Error('CORS not supported');
+    }
+
+    req.onload = function () {
+        if (req.status === 200) {
+            // success
+            console.log("[sendRecord] success :" + JSON.parse(req.responseText));
+            successFunction(JSON.parse(req.responseText));
+        } else {
+            // error
+            console.log("[sendRecord] error : " + method + " : " + req.responseText);
+            // console.log(JSON.parse(req.responseText));
+            failFunction(req.responseText);
+        }
+    };
+
+    if (json !== "") {
+        json["app"] = appId;
+        req.setRequestHeader('Content-Type', 'application/json');
+    }
+
+    req.setRequestHeader('X-Cybozu-API-Token', apiToken);
+
+    console.log("[sendRecord] method : " + method + ", " + JSON.stringify(json));
+    req.send(JSON.stringify(json));
+}
+
 // Get kintone recode
 function setRecord(json, successFunction, failFunction) {
     console.log(url + ' : ' + apiToken);
