@@ -31,7 +31,7 @@ function createCORSRequest(method) {
 }
 
 // Get XMLHttpRequest instance
-function createCORSRequest(method, param) {
+function createCORSRequestParam(method, param) {
     console.log("[createCORSRequest] " + new String(url + param))
     var xhr = new XMLHttpRequest();
     if ("withCredentials" in xhr) {
@@ -90,7 +90,7 @@ function getRecord(param, successFunction, failFunction) {
     let urlParam = "?app=" + appId + "&" + param;
     console.log("[getRecord] start method : " + urlParam);
 
-    req = createCORSRequest('GET', urlParam);
+    req = createCORSRequestParam('GET', urlParam);
     if (!req) {
         throw new Error('CORS not supported');
     }
