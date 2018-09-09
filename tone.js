@@ -19,7 +19,7 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
     // kintone.sendRecord("GET", {
     //     "query": query
     // }, successFunc, failFunc);
-    kintone.getRecord("query=" + querystring.stringify({ query }), successFunc, failFunc);
+    kintone.getRecord(querystring.stringify({ query }), successFunc, failFunc);
 }
 
 // recordId に対して、 name を更新
