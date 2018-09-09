@@ -244,7 +244,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     translator.translator(groupId, result[1], result[2], tone.analyzer);
 
                     // 返信がない場合に向けに、タイマーを設定
-                    updateUser(groupId, result[2]);
+                    updateUser(groupId, result[1]);
 
                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                     events_processed.push(bot.replyMessage(event.replyToken, {
