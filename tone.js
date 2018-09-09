@@ -14,7 +14,7 @@ module.exports.analyzer = analyzer;
 function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("getNameRecord: " + groupId + " : " + name);
 
-    let query = "\"_groupId = " + groupId + " AND _name = " + name + "\"";
+    let query = "_groupId = " + groupId + " AND _name = " + name;
     kintone.sendRecord("GET", {
         "query": query,
         "fields": ["$id", "_timerId", "_tone"]
@@ -31,7 +31,9 @@ function updateTone(id, tone) {
                 "value": tone
             }
         }
-    });
+    },
+        function (data) { console.log("[updateTone][sendRecord] success"); },
+        function (data) { console.log("[updateTone][sendRecord] error"); });
 }
 
 
@@ -46,6 +48,7 @@ function analyzer(groupId, name, text) {
     };
 
     getNameRecord(groupId, name, function (data) {
+        console.log("[analyzer][getNameRecord] success : " + data);
         if (data.record) {
             let id = new String(data.records[i].record_id.value);
 
@@ -60,6 +63,7 @@ function analyzer(groupId, name, text) {
                 }
             });
         }
-    });
+    },
+        console.log("[analyzer][getNameRecord] success : " + data););
 
 }
