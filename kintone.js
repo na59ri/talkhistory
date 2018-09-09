@@ -7,6 +7,7 @@ var urls = 'https://devphtpgt.cybozu.com/k/v1/records.json';
 
 module.exports.sendRecord = sendRecord;
 module.exports.getRecord = getRecord;
+module.exports.sendRecord2 = sendRecord2;
 // module.exports.setRecord = setRecord;
 // module.exports.updateRecord = updateRecord;
 // module.exports.deleteRecord = deleteRecord;
@@ -113,7 +114,7 @@ function getRecord(param, successFunction, failFunction) {
 }
 
 // Send kintone recode
-function getURLSRecord(method, json, successFunction, failFunction) {
+function sendRecord2(method, json, successFunction, failFunction) {
 
     // console.log(url + ' : ' + apiToken);
     console.log("[sendRecord] start method : " + method);
