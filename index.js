@@ -43,7 +43,7 @@ var userArray = {};
 function getIdRecord(groupId, userId, successFunc, failFunc) {
     console.log("getIdRecord: " + groupId + " : " + userId);
 
-    let query = "_groupId = " + groupId + " AND _userId = " + userId;
+    let query = "_groupId = \"" + groupId + "\" AND _userId = \"" + userId + "\"";
     kintone.sendRecord("GET", {
         "query": query,
         "fields": ["$id", "_timerId", "_tone"]
@@ -54,7 +54,7 @@ function getIdRecord(groupId, userId, successFunc, failFunc) {
 function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("getNameRecord: " + groupId + " : " + name);
 
-    let query = "_groupId = " + groupId + " AND _name = " + name;
+    let query = "_groupId = \"" + groupId + "\" AND _name = \"" + name + "\"";
     kintone.sendRecord("GET", {
         "query": query,
         "fields": ["$id", "_timerId", "_tone"]
