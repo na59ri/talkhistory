@@ -43,10 +43,10 @@ var userArray = {};
 function getIdRecord(groupId, userId, successFunc, failFunc) {
     console.log("getIdRecord: " + groupId + " : " + userId);
 
-    let query = "_groupId = \"" + groupId + "\" and _userId = \"" + userId + "\"";
+    let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
     kintone.sendRecord("GET", {
         "query": query,
-        "fields": ["$id", "_timerId", "_tone"]
+        "fields": ["$id", "timerId", "tone"]
     }, successFunc, failFunc);
 }
 
@@ -54,17 +54,17 @@ function getIdRecord(groupId, userId, successFunc, failFunc) {
 function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("getNameRecord: " + groupId + " : " + name);
 
-    let query = "_groupId = \"" + groupId + "\" and _name = \"" + name + "\"";
+    let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
     kintone.sendRecord("GET", {
         "query": query,
-        "fields": ["$id", "_timerId", "_tone"]
+        "fields": ["$id", "timerId", "tone"]
     }, successFunc, failFunc);
 }
 
 // GroupId, UserId, name を kintone に保存
 function addUser(groupId, userId, name) {
     kintone.sendRecord("POST",
-        { "record": { "_groupId": { "value": groupId }, "_userId": { "value": userId }, "_name": { "value": name } } },
+        { "record": { "groupId": { "value": groupId }, "userId": { "value": userId }, "name": { "value": name } } },
         function (data) { console.log("[addUser][sendRecord] success"); },
         function (data) { console.log("[addUser][sendRecord] fail"); });
 }
@@ -75,7 +75,7 @@ function addUserName(id, name) {
     kintone.sendRecord("PUT", {
         "ids": [id],
         "record": {
-            "_name": {
+            "name": {
                 "value": name
             }
         }
@@ -122,10 +122,10 @@ function deleteTimerSuccess(data) {
         kintone.sendRecord("PUT", {
             "ids": [id],
             "record": {
-                "_timerId": {
+                "timerId": {
                     "value": ""
                 },
-                "_tone": {
+                "tone": {
                     "value": ""
                 }
             }
@@ -145,7 +145,7 @@ function updateTimerId(id, timerId) {
     kintone.sendRecord("PUT", {
         "ids": [id],
         "record": {
-            "_timerId": {
+            "timerId": {
                 "value": timerId
             }
         }
@@ -182,9 +182,9 @@ function sendStamp(recordId) {
     sendRecord("GET", { "id": recordId }, function (data) {
         if (data.records) {
 
-            bot.pushMessage(String(data.records[0]._userId.value), {
+            bot.pushMessage(String(data.records[0].userId.value), {
                 type: "text",
-                text: toneTypeReply(String(data.records[0]._tone.value))
+                text: toneTypeReply(String(data.records[0].tone.value))
             });
             updateTimerId(recordId, setTimeout(sendStamp(recordId), TIMEOUT));
         }

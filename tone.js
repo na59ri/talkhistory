@@ -14,10 +14,10 @@ module.exports.analyzer = analyzer;
 function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("getNameRecord: " + groupId + " : " + name);
 
-    let query = "_groupId = \"" + groupId + "\" and _name = \"" + name + "\"";
+    let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
     kintone.sendRecord("GET", {
         "query": query,
-        "fields": ["$id", "_timerId", "_tone"]
+        "fields": ["$id", "timerId", "tone"]
     }, successFunc, failFunc);
 }
 
