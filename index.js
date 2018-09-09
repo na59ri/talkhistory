@@ -65,8 +65,8 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
 function addUser(groupId, userId, name) {
     kintone.sendRecord("POST",
         { "record": { "_groupId": { "value": groupId }, "_userId": { "value": userId }, "_name": { "value": name } } },
-        function (data) { },
-        function (data) { });
+        function (data) { console.log("[addUser][sendRecord] success"); },
+        function (data) { console.log("[addUser][sendRecord] fail"); });
 }
 
 // recordId に対して、 name を更新
@@ -80,8 +80,8 @@ function addUserName(id, name) {
             }
         }
     },
-        function (data) { },
-        function (data) { });
+        function (data) { console.log("[addUserName][sendRecord] success"); },
+        function (data) { console.log("[addUserName][sendRecord] fail"); });
 }
 
 // GroupId, UserId, displayName を kintone に保存
@@ -96,7 +96,7 @@ function addUserArray(groupId, userId) {
                 let sDisplayName = String(profile.displayName);
 
                 getIdRecord(sGroupId, sUserId, function (data) {
-                    console.log("addUser Array OK");
+                    console.log("[addUserArray][getIdRecord] success");
                     if (data.records) {
                         for (let i in data.records) {
                             let id = String(data.records[i].record_id.value);
@@ -106,6 +106,7 @@ function addUserArray(groupId, userId) {
 
                     }
                 }, function (data) {
+                    console.log("[addUserArray][getIdRecord] fail");
                     addUser(sGroupId, sUserId, sDisplayName);
                 });
             });
@@ -128,7 +129,10 @@ function deleteTimerSuccess(data) {
                     "value": ""
                 }
             }
-        });
+        },
+            function (data) { console.log("[deleteTimerSuccess][sendRecord] success"); },
+            function (data) { console.log("[deleteTimerSuccess][sendRecord] error"); }
+        );
     }
 }
 
@@ -145,7 +149,9 @@ function updateTimerId(id, timerId) {
                 "value": timerId
             }
         }
-    });
+    },
+        function (data) { console.log("[updateTimerId][sendRecord] success"); },
+        function (data) { console.log("[updateTimerId][sendRecord] error"); });
 }
 
 // スタンプ
@@ -201,7 +207,8 @@ function updateUserSuccess(data) {
 }
 
 function updateUser(groupId, name) {
-    getNameRecord(groupId, name, updateUserSuccess, function (data) { });
+    getNameRecord(groupId, name, updateUserSuccess,
+        function (data) { console.log("[updateUser][getNameRecord] error"); });
 }
 
 
