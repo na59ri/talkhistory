@@ -33,6 +33,25 @@ function createCORSRequest(method) {
 }
 
 // Get XMLHttpRequest instance
+function createCORSRequests(method) {
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+        // Check if the XMLHttpRequest object has a "withCredentials" property.
+        // "withCredentials" only exists on XMLHTTPRequest2 objects.
+        xhr.open(method, urls, true);
+    } else if (typeof XDomainRequest != "undefined") {
+        // Otherwise, check if XDomainRequest.
+        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+        xhr = new XDomainRequest();
+        xhr.open(method, urls);
+    } else {
+        // Otherwise, CORS is not supported by the browser.
+        xhr = null;
+    }
+    return xhr;
+}
+
+// Get XMLHttpRequest instance
 function createCORSRequestParam(method, param) {
     console.log("[createCORSRequest] " + new String(urls + param))
     var xhr = new XMLHttpRequest();
@@ -118,8 +137,7 @@ function sendRecord2(method, json, successFunction, failFunction) {
 
     // console.log(url + ' : ' + apiToken);
     console.log("[sendRecord] start method : " + method);
-    let xhr = new XMLHttpRequest();
-    req = xhr.open(method, urls, true);
+    req = createCORSRequests(method);
 
     if (!req) {
         throw new Error('CORS not supported');
