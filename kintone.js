@@ -109,7 +109,6 @@ function getRecord(param, successFunction, failFunction) {
     };
 
     req.setRequestHeader('X-Cybozu-API-Token', apiToken);
-    req.setRequestHeader('Content-Type', 'application/json');
     req.send();
 }
 
