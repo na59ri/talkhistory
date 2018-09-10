@@ -39,7 +39,7 @@ function getIdRecord(groupId, userId, successFunc, failFunc) {
     console.log("[getIdRecord] GroupID:" + groupId + ", userId: " + userId);
 
     let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
-    kintone.getRecord(query, ["$id", "tone", "timerId"], true, successFunc, failFunc);
+    kintone.getRecords(query, ["$id", "tone", "timerId"], true, successFunc, failFunc);
 
 }
 
@@ -49,7 +49,7 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("[getIdRecord] GroupID:" + groupId + ", name: " + name);
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
-    kintone.getRecord(query, ["$id", "tone", "timerId"], true, successFunc, failFunc);
+    kintone.getRecords(query, ["$id", "tone", "timerId"], true, successFunc, failFunc);
 }
 
 // GroupId, UserId, name を kintone に保存
@@ -153,9 +153,11 @@ function toneTypeReply(tone) {
 
 // TODO: スタンプ送信
 function sendStamp(recordId) {
-    console.log("sendStamp:" + recordId);
-    sendRecord("GET", { "id": recordId }, function (data) {
-        if (data.records) {
+    console.log("[sendStamp]:" + recordId);
+    kintone(recordId, function (data) {
+        console.log("[sendStamp] success:" + JSON.stringify(data));
+
+        if (data.totalCount != 0) {
 
             bot.pushMessage(String(data.records[0].userId.value), {
                 type: "text",
@@ -163,7 +165,7 @@ function sendStamp(recordId) {
             });
             updateTimerId(recordId, setTimeout(sendStamp(recordId), TIMEOUT));
         }
-    });
+    }, function (data) { console.log("[sendStamp] fail"); });
 }
 
 function updateUserSuccess(data) {

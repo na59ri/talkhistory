@@ -10,6 +10,7 @@ var FQDN = 'devphtpgt.cybozu.com';
 // -----------------------------------------------------------------------------
 // 外部参照
 module.exports.getRecord = getRecord;
+module.exports.getRecords = getRecords;
 module.exports.addRecord = addRecord;
 module.exports.updateRecord = updateRecord;
 module.exports.deleteRecord = deleteRecord;
@@ -23,11 +24,11 @@ var kintoneRecord = new kintone.Record(kintoneConnection);
 
 // -----------------------------------------------------------------------------
 // Get kintone recode
-function getRecord(query, fields, totalCount, successFunction, failFunction) {
+function getRecord(id, successFunction, failFunction) {
 
     console.log("[getRecord] : start");
 
-    kintoneRecord.getRecords(appId, query, fields, totalCount)
+    kintoneRecord.getRecord(appId, id)
         .then((rsp) => {
             console.log("[getRecord] : " + JSON.stringify(rsp));
             successFunction(rsp);
@@ -35,6 +36,24 @@ function getRecord(query, fields, totalCount, successFunction, failFunction) {
         .catch((err) => {
             // This SDK return err with KintoneAPIExeption
             console.log("[addRecord] : error");
+            failFunction();
+        });
+}
+
+// -----------------------------------------------------------------------------
+// Get kintone recode
+function getRecords(query, fields, totalCount, successFunction, failFunction) {
+
+    console.log("[getRecords] : start");
+
+    kintoneRecord.getRecords(appId, query, fields, totalCount)
+        .then((rsp) => {
+            console.log("[getRecords] : " + JSON.stringify(rsp));
+            successFunction(rsp);
+        })
+        .catch((err) => {
+            // This SDK return err with KintoneAPIExeption
+            console.log("[addRecords] : error");
             failFunction();
         });
 }
