@@ -26,12 +26,12 @@ server.listen(process.env.PORT || 3000);
 
 // -----------------------------------------------------------------------------
 // kintone sdk
-const kintone = require('kintone-nodejs-sdk');
+const kintone1 = require('kintone-nodejs-sdk');
 
-let kintoneAuthWithAPIToken = (new kintone.Auth()).setApiToken(process.env.KINTONE_API_TOKEN);
-let kintoneConnection = new kintone.Connection('devphtpgt.cybozu.com', kintoneAuthWithAPIToken);
+let kintoneAuthWithAPIToken = (new kintone1.Auth()).setApiToken(process.env.KINTONE_API_TOKEN);
+let kintoneConnection = new kintone1.Connection('devphtpgt.cybozu.com', kintoneAuthWithAPIToken);
 
-let kintoneRecord = new kintone.Record(kintoneConnection);
+let kintoneRecord = new kintone1.Record(kintoneConnection);
 
 
 
