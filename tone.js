@@ -45,7 +45,7 @@ function analyzer(groupId, name, text) {
         console.log("[analyzer][getNameRecord] success : " + JSON.stringify(data));
         if (data.totalCount != 0) {
             for (let i in data.records) {
-                let id = new String(data.records[i].$id.value);
+                let id = Number(data.records[i].$id.value);
 
                 console.log("[analyzer][getNameRecord] success : " + JSON.stringify(toneParams));
                 toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {

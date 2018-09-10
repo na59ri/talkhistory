@@ -68,7 +68,7 @@ function addUserName(id, name) {
 
     console.log("[addUserName] id:" + id + ", name:" + name);
 
-    kintone.updateRecord(id, { "name": { "value": name } },
+    kintone.updateRecord(Number(id), { "name": { "value": name } },
         function (data) { console.log("[addUserName][sendRecord] success"); },
         function (data) { console.log("[addUserName][sendRecord] fail"); });
 }
@@ -110,7 +110,7 @@ function deleteTimerSuccess(data) {
         console.log(id + " : " + timerId);
         clearTimeout(timerId);
 
-        kintone.updateRecord(id, { "timerId": { "value": "" }, "tone": { "value": "" } },
+        kintone.updateRecord(Number(id), { "timerId": { "value": "" }, "tone": { "value": "" } },
             function (data) { console.log("[deleteTimerSuccess][sendRecord] success"); },
             function (data) { console.log("[deleteTimerSuccess][sendRecord] error"); }
         );
@@ -124,7 +124,7 @@ function deleteUser(groupId, name) {
 
 function updateTimerId(id, timerId) {
 
-    kintone.updateRecord(id, { "timerId": { "value": timerId } },
+    kintone.updateRecord(Number(id), { "timerId": { "value": timerId } },
         function (data) { console.log("[updateTimerId][sendRecord] success"); },
         function (data) { console.log("[updateTimerId][sendRecord] error"); });
 }
@@ -153,8 +153,9 @@ function toneTypeReply(tone) {
 
 // TODO: スタンプ送信
 function sendStamp(recordId) {
+    let id = Number(recordId);
     console.log("[sendStamp]:" + recordId);
-    kintone.getRecord(recordId, function (data) {
+    kintone.getRecord(id, function (data) {
         console.log("[sendStamp] success:" + JSON.stringify(data));
 
         if (data.totalCount != 0) {
@@ -163,14 +164,14 @@ function sendStamp(recordId) {
                 type: "text",
                 text: toneTypeReply(String(data.records[0].tone.value))
             });
-            updateTimerId(recordId, setTimeout(sendStamp(recordId), TIMEOUT));
+            updateTimerId(id, setTimeout(sendStamp(recordId), TIMEOUT));
         }
     }, function () { console.log("[sendStamp] fail"); });
 }
 
 function updateUserSuccess(data) {
     for (let i in data.records) {
-        let id = String(data.records[i].$id.value);
+        let id = Number(data.records[i].$id.value);
         let timerId = String(data.records[i].timerId.value);
         console.log("[updateUserSuccess] : " + id + " : " + timerId);
 

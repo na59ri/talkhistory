@@ -35,7 +35,7 @@ function getRecord(id, successFunction, failFunction) {
         })
         .catch((err) => {
             // This SDK return err with KintoneAPIExeption
-            console.log("[addRecord] : error");
+            console.log("[getRecord] : error");
             failFunction();
         });
 }
@@ -53,7 +53,7 @@ function getRecords(query, fields, totalCount, successFunction, failFunction) {
         })
         .catch((err) => {
             // This SDK return err with KintoneAPIExeption
-            console.log("[addRecords] : error");
+            console.log("[getRecords] : error");
             failFunction();
         });
 }
