@@ -40,6 +40,7 @@ function analyzer(groupId, name, text) {
         'content_type': 'application/json'
     };
 
+    console.log("[analyzer] groupId: " + groupId + ", name:" + name);
     getNameRecord(groupId, name, function (data) {
         console.log("[analyzer][getNameRecord] success : " + JSON.stringify(data));
         if (data.record) {
