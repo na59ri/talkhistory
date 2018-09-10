@@ -52,7 +52,7 @@ function analyzer(groupId, name, text) {
                         console.log(error);
                     } else {
                         console.log(JSON.stringify(toneAnalysis, null, 2));
-                        if (toneAnalysis.document_tone) {
+                        if (toneAnalysis.document_tone.tones.length != 0) {
                             updateTone(id, new String(toneAnalysis.document_tone.tones[0].tone_id));
                         }
                     }

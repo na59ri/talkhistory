@@ -170,11 +170,11 @@ function updateUserSuccess(data) {
     for (let i in data.records) {
         let id = String(data.records[i].$id.value);
         let timerId = String(data.records[i].timerId.value);
-        console.log("updateUserSuccess : " + id + " : " + timerId);
+        console.log("[updateUserSuccess] : " + id + " : " + timerId);
 
         if (!timerId) {
             let newTimerId = setTimeout(sendStamp(id), TIMEOUT);
-            console.log("updateUserSuccess update: " + newTimerId);
+            console.log("[updateUserSuccess] update: " + newTimerId);
             updateTimerId(id, newTimerId);
 
         }
