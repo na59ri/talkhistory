@@ -13,28 +13,20 @@ module.exports.analyzer = analyzer;
 
 // groupId と name を使って kintone から情報を取得
 function getNameRecord(groupId, name, successFunc, failFunc) {
-    console.log("getNameRecord: " + groupId + " : " + name);
+
+    console.log("[tone][getIdRecord] GroupID:" + groupId + ", name: " + name);
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
-    // kintone.sendRecord("GET", {
-    //     "query": query
-    // }, successFunc, failFunc);
-    kintone.getRecord(querystring.stringify({ query }), successFunc, failFunc);
+    kintone.getRecord(query, [], false, successFunc, failFunc);
 }
 
 // recordId に対して、 name を更新
 function updateTone(id, tone) {
 
-    kintone.sendRecord("PUT", {
-        "ids": [id],
-        "record": {
-            "_tone": {
-                "value": tone
-            }
-        }
-    },
-        function (data) { console.log("[updateTone][sendRecord] success"); },
-        function (data) { console.log("[updateTone][sendRecord] error"); });
+    kintone.updateRecord(id, { "tone": { "value": tone } },
+        function (data) { console.log("[updateTone][updateRecord] success"); },
+        function (data) { console.log("[updateTone][updateRecord] error"); }
+    );
 }
 
 

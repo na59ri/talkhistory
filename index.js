@@ -2,7 +2,6 @@
 // モジュールのインポート
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
-const querystring = require("querystring");
 const translator = require("./translator");
 const tone = require("./tone");
 const kintone = require("./kintone");
@@ -24,16 +23,6 @@ const bot = new line.Client(line_config);
 // Webサーバー設定
 server.listen(process.env.PORT || 3000);
 
-// -----------------------------------------------------------------------------
-// kintone sdk
-const kintone1 = require('kintone-nodejs-sdk');
-
-let kintoneAuthWithAPIToken = (new kintone1.Auth()).setApiToken(process.env.KINTONE_API_TOKEN);
-let kintoneConnection = new kintone1.Connection('devphtpgt.cybozu.com', kintoneAuthWithAPIToken);
-
-let kintoneRecord = new kintone1.Record(kintoneConnection);
-
-
 
 // -----------------------------------------------------------------------------
 // ルーター設定
@@ -42,59 +31,33 @@ let kintoneRecord = new kintone1.Record(kintoneConnection);
 //     console.log(req.body);
 // });
 
-// key : group Id
-// value : user Id / time Id array
-var groupArray = {};
 
-// key userId 
-// value :Display name add
-var userArray = {};
 
 // groupId と userId を使って kintone から情報を取得
 function getIdRecord(groupId, userId, successFunc, failFunc) {
 
-    let app = 1;
+    console.log("[getIdRecord] GroupID:" + groupId + ", userId: " + userId);
+
     let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
-    let fields = [];
-    let totalCount = true;
-    kintoneRecord.getRecords(app, query, fields, totalCount)
-        .then((rsp) => {
-            console.log(rsp);
-        })
-        .catch((err) => {
-            // This SDK return err with KintoneAPIExeption
-            console.log(err.get());
-        });
-    // let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
-    // console.log("[getNameRecord] " + query);
+    kintone.getRecord(query, ["$id", "tone", "timerId"], false, successFunc, failFunc);
 
-    // kintone.sendRecord2("GET", {
-    //     "query": query
-    // }, successFunc, failFunc);
-
-    // console.log("[getIdRecord] " + querystring.stringify({ query }));
-
-    // kintone.getRecord(querystring.stringify({ query }), successFunc, failFunc);
 }
 
 // groupId と name を使って kintone から情報を取得
 function getNameRecord(groupId, name, successFunc, failFunc) {
-    // console.log("getNameRecord: " + groupId + " : " + name);
+
+    console.log("[getIdRecord] GroupID:" + groupId + ", name: " + name);
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
-    console.log("[getNameRecord] " + query);
-
-    kintone.sendRecord2("GET", {
-        "query": query
-    }, successFunc, failFunc);
-    // console.log("[getNameRecord] " + querystring.stringify({ query }));
-
-    // kintone.getRecord(querystring.stringify({ query }), successFunc, failFunc);
+    kintone.getRecord(query, [], false, successFunc, failFunc);
 }
 
 // GroupId, UserId, name を kintone に保存
 function addUser(groupId, userId, name) {
-    kintone.sendRecord("POST",
+
+    console.log("[addUser] id:" + id + ", name:" + name);
+
+    kintone.addRecord(
         { "record": { "groupId": { "value": groupId }, "userId": { "value": userId }, "name": { "value": name } } },
         function (data) { console.log("[addUser][sendRecord] success"); },
         function (data) { console.log("[addUser][sendRecord] fail"); });
@@ -103,21 +66,16 @@ function addUser(groupId, userId, name) {
 // recordId に対して、 name を更新
 function addUserName(id, name) {
 
-    kintone.sendRecord("PUT", {
-        "ids": [id],
-        "record": {
-            "name": {
-                "value": name
-            }
-        }
-    },
+    console.log("[addUserName] id:" + id + ", name:" + name);
+
+    kintone.updateRecord(id, { "name": { "value": name } },
         function (data) { console.log("[addUserName][sendRecord] success"); },
         function (data) { console.log("[addUserName][sendRecord] fail"); });
 }
 
 // GroupId, UserId, displayName を kintone に保存
 function addUserArray(groupId, userId) {
-    console.log("addUserArray: " + groupId + " : " + userId);
+    console.log("[addUserArray]: " + groupId + " : " + userId);
     if (groupId && userId) {
         bot.getProfile(userId)
             .then((profile) => {
@@ -147,20 +105,12 @@ function addUserArray(groupId, userId) {
 // UserのtimerId/toneを削除する
 function deleteTimerSuccess(data) {
     for (let i in data.records) {
-        let id = String(data.records[i].record_id.value);
+        let id = new String(data.records[i].レコード番号.value);
+        let timerId = new String(data.records[i].timerId.value);
         console.log(id + " : " + timerId);
         clearTimeout(timerId);
-        kintone.sendRecord("PUT", {
-            "ids": [id],
-            "record": {
-                "timerId": {
-                    "value": ""
-                },
-                "tone": {
-                    "value": ""
-                }
-            }
-        },
+
+        kintone.updateRecord(id, { "timerId": { "value": "" }, "tone": { "value": "" } },
             function (data) { console.log("[deleteTimerSuccess][sendRecord] success"); },
             function (data) { console.log("[deleteTimerSuccess][sendRecord] error"); }
         );
@@ -173,14 +123,8 @@ function deleteUser(groupId, name) {
 }
 
 function updateTimerId(id, timerId) {
-    kintone.sendRecord("PUT", {
-        "ids": [id],
-        "record": {
-            "timerId": {
-                "value": timerId
-            }
-        }
-    },
+
+    kintone.updateRecord(id, { "timerId": { "value": timerId } },
         function (data) { console.log("[updateTimerId][sendRecord] success"); },
         function (data) { console.log("[updateTimerId][sendRecord] error"); });
 }

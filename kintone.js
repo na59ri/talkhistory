@@ -1,256 +1,93 @@
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+// -----------------------------------------------------------------------------
+// kintone sdk
+const kintone = require('kintone-nodejs-sdk');
 
-var apiToken = process.env.KINTONE_API_TOKEN;
+// -----------------------------------------------------------------------------
+// パラメータ設定
 var appId = 1;
-var url = 'https://devphtpgt.cybozu.com/k/v1/record.json';
-var urls = 'https://devphtpgt.cybozu.com/k/v1/records.json';
+var FQDN = 'devphtpgt.cybozu.com';
 
-module.exports.sendRecord = sendRecord;
+// -----------------------------------------------------------------------------
+// 外部参照
 module.exports.getRecord = getRecord;
-module.exports.sendRecord2 = sendRecord2;
-// module.exports.setRecord = setRecord;
-// module.exports.updateRecord = updateRecord;
-// module.exports.deleteRecord = deleteRecord;
+module.exports.addRecord = addRecord;
+module.exports.updateRecord = updateRecord;
+module.exports.deleteRecord = deleteRecord;
+
+// -----------------------------------------------------------------------------
+// kintone の初期化
+var kintoneAuthWithAPIToken = (new kintone.Auth()).setApiToken(process.env.KINTONE_API_TOKEN);
+var kintoneConnection = new kintone.Connection(FQDN, kintoneAuthWithAPIToken);
+var kintoneRecord = new kintone.Record(kintoneConnection);
 
 
-// Get XMLHttpRequest instance
-function createCORSRequest(method) {
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-        // Check if the XMLHttpRequest object has a "withCredentials" property.
-        // "withCredentials" only exists on XMLHTTPRequest2 objects.
-        xhr.open(method, url, true);
-    } else if (typeof XDomainRequest != "undefined") {
-        // Otherwise, check if XDomainRequest.
-        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-        xhr = new XDomainRequest();
-        xhr.open(method, url);
-    } else {
-        // Otherwise, CORS is not supported by the browser.
-        xhr = null;
-    }
-    return xhr;
-}
-
-// Get XMLHttpRequest instance
-function createCORSRequests(method) {
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-        // Check if the XMLHttpRequest object has a "withCredentials" property.
-        // "withCredentials" only exists on XMLHTTPRequest2 objects.
-        xhr.open(method, urls, true);
-    } else if (typeof XDomainRequest != "undefined") {
-        // Otherwise, check if XDomainRequest.
-        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-        xhr = new XDomainRequest();
-        xhr.open(method, urls);
-    } else {
-        // Otherwise, CORS is not supported by the browser.
-        xhr = null;
-    }
-    return xhr;
-}
-
-// Get XMLHttpRequest instance
-function createCORSRequestParam(method, param) {
-    console.log("[createCORSRequest] " + new String(urls + param))
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-        // Check if the XMLHttpRequest object has a "withCredentials" property.
-        // "withCredentials" only exists on XMLHTTPRequest2 objects.
-        xhr.open(method, new String(urls + param), true);
-    } else if (typeof XDomainRequest != "undefined") {
-        // Otherwise, check if XDomainRequest.
-        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-        xhr = new XDomainRequest();
-        xhr.open(method, new String(urls + param));
-    } else {
-        // Otherwise, CORS is not supported by the browser.
-        xhr = null;
-    }
-    return xhr;
-}
-
-// Send kintone recode
-function sendRecord(method, json, successFunction, failFunction) {
-
-    // console.log(url + ' : ' + apiToken);
-    console.log("[sendRecord] start method : " + method);
-    req = createCORSRequest(method);
-    if (!req) {
-        throw new Error('CORS not supported');
-    }
-
-    req.onload = function () {
-        if (req.status === 200) {
-            // success
-            console.log("[sendRecord] success :" + JSON.parse(req.responseText));
-            successFunction(JSON.parse(req.responseText));
-        } else {
-            // error
-            console.log("[sendRecord] error : " + method + " : " + req.responseText);
-            // console.log(JSON.parse(req.responseText));
-            failFunction(req.responseText);
-        }
-    };
-
-    if (json !== "") {
-        json["app"] = appId;
-        req.setRequestHeader('Content-Type', 'application/json');
-    }
-
-    req.setRequestHeader('X-Cybozu-API-Token', apiToken);
-
-    console.log("[sendRecord] method : " + method + ", " + JSON.stringify(json));
-    req.send(JSON.stringify(json));
-}
-
+// -----------------------------------------------------------------------------
 // Get kintone recode
-function getRecord(param, successFunction, failFunction) {
+function getRecord(query, fields, totalCount, successFunction, failFunction) {
 
-    let urlParam = "?app=" + appId + "&" + param;
-    console.log("[getRecord] start method : " + urlParam);
+    console.log("[getRecord] : start");
 
-    req = createCORSRequestParam('GET', urlParam);
-    if (!req) {
-        throw new Error('CORS not supported');
-    }
-
-    req.onload = function () {
-        if (req.status === 200) {
-            // success
-            console.log("[getRecord] success :" + JSON.parse(req.responseText));
-            successFunction(JSON.parse(req.responseText));
-        } else {
-            // error
-            console.log("[getRecord] error : " + req.responseText);
+    kintoneRecord.getRecords(app, query, fields, totalCount)
+        .then((rsp) => {
+            console.log("[getRecord] : " + rsp);
+            successFunction(rsp);
+        })
+        .catch((err) => {
+            // This SDK return err with KintoneAPIExeption
+            console.log("[getRecord] : " + err.get());
             failFunction();
-        }
-    };
-
-    req.setRequestHeader('X-Cybozu-API-Token', apiToken);
-    req.send();
+        });
 }
 
-// Send kintone recode
-function sendRecord2(method, json, successFunction, failFunction) {
 
-    // console.log(url + ' : ' + apiToken);
-    console.log("[sendRecord] start method : " + method);
-    req = createCORSRequests(method);
+// -----------------------------------------------------------------------------
+// Add kintone recode
+function addRecord(recordJson, successFunction, failFunction) {
 
-    if (!req) {
-        throw new Error('CORS not supported');
-    }
+    console.log("[addRecord] : start");
 
-    req.onload = function () {
-        if (req.status === 200) {
-            // success
-            console.log("[sendRecord] success :" + JSON.parse(req.responseText));
-            successFunction(JSON.parse(req.responseText));
-        } else {
-            // error
-            console.log("[sendRecord] error : " + method + " : " + req.responseText);
-            // console.log(JSON.parse(req.responseText));
-            failFunction(req.responseText);
-        }
-    };
-
-    if (json !== "") {
-        json["app"] = appId;
-        req.setRequestHeader('Content-Type', 'application/json');
-    }
-
-    req.setRequestHeader('X-Cybozu-API-Token', apiToken);
-
-    console.log("[sendRecord] method : " + method + ", " + JSON.stringify(json));
-    req.send(JSON.stringify(json));
+    kintoneRecord.addRecord(app, recordJson)
+        .then((rsp) => {
+            console.log("[addRecord] : " + rsp);
+            successFunction(rsp);
+        })
+        .catch((err) => {
+            console.log("[addRecord] : " + err.get());
+            failFunction();
+        });
 }
 
-// Get kintone recode
-function setRecord(json, successFunction, failFunction) {
-    console.log(url + ' : ' + apiToken);
-    req = createCORSRequest('POST');
-    if (!req) {
-        throw new Error('CORS not supported');
-    }
-
-    req.onload = function () {
-        if (req.status === 200) {
-            // success
-            console.log(JSON.parse(req.responseText));
-            successFunction(JSON.parse(req.responseText));
-        } else {
-            // error
-            console.log(JSON.parse(req.responseText));
-            failFunction(JSON.parse(req.responseText));
-        }
-    };
-
-    if (json !== "") {
-        json["app"] = appId;
-        req.setRequestHeader('Content-Type', 'application/json');
-    }
-
-    req.setRequestHeader('X-Cybozu-API-Token', apiToken);
-    req.send(json);
-}
-
+// -----------------------------------------------------------------------------
 // Update kintone recode
-function updateRecord(json, successFunction, failFunction) {
-    console.log(url + ' : ' + apiToken);
-    req = createCORSRequest('PUT');
-    if (!req) {
-        throw new Error('CORS not supported');
-    }
+function updateRecord(id, recordJson, revision, successFunction, failFunction) {
 
-    req.onload = function () {
-        if (req.status === 200) {
-            // success
-            console.log(JSON.parse(req.responseText));
-            successFunction(JSON.parse(req.responseText));
-        } else {
-            // error
-            console.log(JSON.parse(req.responseText));
-            failFunction(JSON.parse(req.responseText));
-        }
-    };
+    console.log("[updateRecord] : start");
 
-    if (json !== "") {
-        json["app"] = appId;
-        req.setRequestHeader('Content-Type', 'application/json');
-    }
-
-    req.setRequestHeader('X-Cybozu-API-Token', apiToken);
-    req.send(json);
+    kintoneRecord.updateRecordById(app, id, recordJson, revision)
+        .then((rsp) => {
+            console.log("[updateRecord] : " + rsp);
+            successFunction(rsp);
+        })
+        .catch((err) => {
+            console.log("[updateRecord] : " + err.get());
+            failFunction();
+        });
 }
 
+// -----------------------------------------------------------------------------
 // Delete kintone recode
-function deleteRecord(json, successFunction, failFunction) {
-    console.log(url + ' : ' + apiToken);
-    req = createCORSRequest('DELETE');
-    if (!req) {
-        throw new Error('CORS not supported');
-    }
+function deleteRecord(ids, successFunction, failFunction) {
 
-    req.onload = function () {
-        if (req.status === 200) {
-            // success
-            console.log(JSON.parse(req.responseText));
-            successFunction(JSON.parse(req.responseText));
-        } else {
-            // error
-            console.log(JSON.parse(req.responseText));
-            failFunction(JSON.parse(req.responseText));
-        }
-    };
+    console.log("[deleteRecord] : start");
 
-    if (json !== "") {
-        json["app"] = appId;
-        req.setRequestHeader('Content-Type', 'application/json');
-    }
-
-    req.setRequestHeader('X-Cybozu-API-Token', apiToken);
-    req.send(json);
+    kintoneRecord.deleteRecords(app, ids)
+        .then((rsp) => {
+            console.log("[deleteRecord] : " + rsp);
+            successFunction(rsp);
+        })
+        .catch((err) => {
+            console.log("[deleteRecord] : " + err.get());
+            failFunction();
+        });
 }
 
