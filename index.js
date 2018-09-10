@@ -95,8 +95,8 @@ function addUserArray(groupId, userId) {
                         addUser(sGroupId, sUserId, sDisplayName);
                     }
                 }, function (data) {
-                    console.log("[addUserArray][getIdRecord] fail");
-                    addUser(sGroupId, sUserId, sDisplayName);
+                    // console.log("[addUserArray][getIdRecord] fail");
+                    // addUser(sGroupId, sUserId, sDisplayName);
                 });
             });
     }
