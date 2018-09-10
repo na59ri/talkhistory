@@ -154,7 +154,7 @@ function toneTypeReply(tone) {
 // TODO: スタンプ送信
 function sendStamp(recordId) {
     console.log("[sendStamp]:" + recordId);
-    kintone(recordId, function (data) {
+    kintone.getRecord(recordId, function (data) {
         console.log("[sendStamp] success:" + JSON.stringify(data));
 
         if (data.totalCount != 0) {
