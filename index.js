@@ -86,17 +86,16 @@ function addUserArray(groupId, userId) {
 
                 getIdRecord(sGroupId, sUserId, function (data) {
                     console.log("[addUserArray][getIdRecord] success");
-                    if (data.records) {
+                    if (data.totalCount) {
                         for (let i in data.records) {
                             let id = String(data.records[i].record_id.value);
                             addUserName(id, sDisplayName);
                         }
                     } else {
-
+                        addUser(sGroupId, sUserId, sDisplayName);
                     }
                 }, function (data) {
                     console.log("[addUserArray][getIdRecord] fail");
-                    addUser(sGroupId, sUserId, sDisplayName);
                 });
             });
     }
