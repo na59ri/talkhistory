@@ -24,6 +24,16 @@ const bot = new line.Client(line_config);
 // Webサーバー設定
 server.listen(process.env.PORT || 3000);
 
+// -----------------------------------------------------------------------------
+// kintone sdk
+const kintone = require('kintone-nodejs-sdk');
+
+let kintoneAuthWithAPIToken = (new kintone.Auth()).setApiToken(process.env.KINTONE_API_TOKEN);
+let kintoneConnection = new kintone.Connection('devphtpgt.cybozu.com', kintoneAuthWithAPIToken);
+
+let kintoneRecord = new kintone.Record(kintoneConnection);
+
+
 
 // -----------------------------------------------------------------------------
 // ルーター設定
@@ -43,12 +53,25 @@ var userArray = {};
 // groupId と userId を使って kintone から情報を取得
 function getIdRecord(groupId, userId, successFunc, failFunc) {
 
+    let app = 1;
     let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
-    console.log("[getNameRecord] " + query);
+    let fields = [];
+    let totalCount = true;
+    kintoneRecord.getRecords(app, query, fields, totalCount)
+        .then((rsp) => {
+            console.log(rsp);
+        })
+        .catch((err) => {
+            // This SDK return err with KintoneAPIExeption
+            console.log(err.get());
+        });
+    // let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
+    // console.log("[getNameRecord] " + query);
 
-    kintone.sendRecord2("GET", {
-        "query": query
-    }, successFunc, failFunc);
+    // kintone.sendRecord2("GET", {
+    //     "query": query
+    // }, successFunc, failFunc);
+
     // console.log("[getIdRecord] " + querystring.stringify({ query }));
 
     // kintone.getRecord(querystring.stringify({ query }), successFunc, failFunc);
