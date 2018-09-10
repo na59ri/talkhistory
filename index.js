@@ -96,6 +96,7 @@ function addUserArray(groupId, userId) {
                     }
                 }, function (data) {
                     console.log("[addUserArray][getIdRecord] fail");
+                    addUser(sGroupId, sUserId, sDisplayName);
                 });
             });
     }
