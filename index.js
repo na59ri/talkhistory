@@ -165,7 +165,7 @@ function sendStamp(recordId) {
             });
             updateTimerId(recordId, setTimeout(sendStamp(recordId), TIMEOUT));
         }
-    }, function (data) { console.log("[sendStamp] fail"); });
+    }, function () { console.log("[sendStamp] fail"); });
 }
 
 function updateUserSuccess(data) {
