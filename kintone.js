@@ -34,7 +34,7 @@ function getRecord(query, fields, totalCount, successFunction, failFunction) {
         })
         .catch((err) => {
             // This SDK return err with KintoneAPIExeption
-            console.log("[getRecord] : " + err.get());
+            console.log("[addRecord] : error");
             failFunction();
         });
 }
@@ -52,7 +52,7 @@ function addRecord(recordJson, successFunction, failFunction) {
             successFunction(rsp);
         })
         .catch((err) => {
-            console.log("[addRecord] : " + err.get());
+            console.log("[addRecord] : error");
             failFunction();
         });
 }
@@ -69,7 +69,7 @@ function updateRecord(id, recordJson, revision, successFunction, failFunction) {
             successFunction(rsp);
         })
         .catch((err) => {
-            console.log("[updateRecord] : " + err.get());
+            console.log("[addRecord] : error");
             failFunction();
         });
 }
@@ -86,7 +86,7 @@ function deleteRecord(ids, successFunction, failFunction) {
             successFunction(rsp);
         })
         .catch((err) => {
-            console.log("[deleteRecord] : " + err.get());
+            console.log("[addRecord] : error");
             failFunction();
         });
 }
