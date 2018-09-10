@@ -27,7 +27,7 @@ function getRecord(query, fields, totalCount, successFunction, failFunction) {
 
     console.log("[getRecord] : start");
 
-    kintoneRecord.getRecords(app, query, fields, totalCount)
+    kintoneRecord.getRecords(appId, query, fields, totalCount)
         .then((rsp) => {
             console.log("[getRecord] : " + rsp);
             successFunction(rsp);
@@ -46,7 +46,7 @@ function addRecord(recordJson, successFunction, failFunction) {
 
     console.log("[addRecord] : start");
 
-    kintoneRecord.addRecord(app, recordJson)
+    kintoneRecord.addRecord(appId, recordJson)
         .then((rsp) => {
             console.log("[addRecord] : " + rsp);
             successFunction(rsp);
@@ -63,7 +63,7 @@ function updateRecord(id, recordJson, revision, successFunction, failFunction) {
 
     console.log("[updateRecord] : start");
 
-    kintoneRecord.updateRecordById(app, id, recordJson, revision)
+    kintoneRecord.updateRecordById(appId, id, recordJson, revision)
         .then((rsp) => {
             console.log("[updateRecord] : " + rsp);
             successFunction(rsp);
@@ -80,7 +80,7 @@ function deleteRecord(ids, successFunction, failFunction) {
 
     console.log("[deleteRecord] : start");
 
-    kintoneRecord.deleteRecords(app, ids)
+    kintoneRecord.deleteRecords(appId, ids)
         .then((rsp) => {
             console.log("[deleteRecord] : " + rsp);
             successFunction(rsp);
