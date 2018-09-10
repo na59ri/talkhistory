@@ -43,7 +43,7 @@ function analyzer(groupId, name, text) {
     console.log("[analyzer] groupId: " + groupId + ", name:" + name);
     getNameRecord(groupId, name, function (data) {
         console.log("[analyzer][getNameRecord] success : " + JSON.stringify(data));
-        if (data.record) {
+        if (data.totalCount != 0) {
             for (let i in data.records) {
                 let id = new String(data.records[i].$id.value);
 
