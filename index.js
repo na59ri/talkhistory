@@ -39,7 +39,7 @@ function getIdRecord(groupId, userId, successFunc, failFunc) {
     console.log("[getIdRecord] GroupID:" + groupId + ", userId: " + userId);
 
     let query = "groupId = \"" + groupId + "\" and userId = \"" + userId + "\"";
-    kintone.getRecord(query, ["$id", "tone", "timerId"], false, successFunc, failFunc);
+    kintone.getRecord(query, ["$id", "tone", "timerId"], true, successFunc, failFunc);
 
 }
 
@@ -49,7 +49,7 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("[getIdRecord] GroupID:" + groupId + ", name: " + name);
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
-    kintone.getRecord(query, [], false, successFunc, failFunc);
+    kintone.getRecord(query, ["$id", "tone", "timerId"], true, successFunc, failFunc);
 }
 
 // GroupId, UserId, name を kintone に保存

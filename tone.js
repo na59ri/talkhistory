@@ -17,7 +17,7 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
     console.log("[tone][getIdRecord] GroupID:" + groupId + ", name: " + name);
 
     let query = "groupId = \"" + groupId + "\" and name = \"" + name + "\"";
-    kintone.getRecord(query, [], false, successFunc, failFunc);
+    kintone.getRecord(query, ["$id", "tone", "timerId"], true, successFunc, failFunc);
 }
 
 // recordId に対して、 name を更新
