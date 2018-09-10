@@ -55,7 +55,7 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
 // GroupId, UserId, name を kintone に保存
 function addUser(groupId, userId, name) {
 
-    console.log("[addUser] id:" + id + ", name:" + name);
+    console.log("[addUser] userId:" + userId + ", name:" + name);
 
     kintone.addRecord(
         { "record": { "groupId": { "value": groupId }, "userId": { "value": userId }, "name": { "value": name } } },
