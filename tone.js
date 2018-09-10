@@ -44,18 +44,20 @@ function analyzer(groupId, name, text) {
     getNameRecord(groupId, name, function (data) {
         console.log("[analyzer][getNameRecord] success : " + JSON.stringify(data));
         if (data.record) {
-            let id = new String(data.records[i].record_id.value);
+            for (let i in data.records) {
+                let id = new String(data.records[i].$id.value);
 
-            toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(JSON.stringify(toneAnalysis, null, 2));
-                    if (toneAnalysis.document_tone) {
-                        updateTone(id, new String(toneAnalysis.document_tone.tones[0].tone_id));
+                toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log(JSON.stringify(toneAnalysis, null, 2));
+                        if (toneAnalysis.document_tone) {
+                            updateTone(id, new String(toneAnalysis.document_tone.tones[0].tone_id));
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     },
         function (data) { console.log("[analyzer][getNameRecord] fail"); });

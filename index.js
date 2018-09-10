@@ -88,7 +88,7 @@ function addUserArray(groupId, userId) {
                     console.log("[addUserArray][getIdRecord] success");
                     if (data.totalCount != null) {
                         for (let i in data.records) {
-                            let id = String(data.records[i].record_id.value);
+                            let id = String(data.records[i].$id.value);
                             addUserName(id, sDisplayName);
                         }
                     } else {
@@ -105,7 +105,7 @@ function addUserArray(groupId, userId) {
 // UserのtimerId/toneを削除する
 function deleteTimerSuccess(data) {
     for (let i in data.records) {
-        let id = new String(data.records[i].レコード番号.value);
+        let id = new String(data.records[i].$id.value);
         let timerId = new String(data.records[i].timerId.value);
         console.log(id + " : " + timerId);
         clearTimeout(timerId);
@@ -168,8 +168,8 @@ function sendStamp(recordId) {
 
 function updateUserSuccess(data) {
     for (let i in data.records) {
-        let id = String(data.records[i].record_id.value);
-        let timerId = String(data.records[i].record_id.value);
+        let id = String(data.records[i].$id.value);
+        let timerId = String(data.records[i].timerId.value);
         console.log("updateUserSuccess : " + id + " : " + timerId);
 
         if (!timerId) {
