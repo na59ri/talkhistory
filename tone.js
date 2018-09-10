@@ -47,11 +47,12 @@ function analyzer(groupId, name, text) {
             for (let i in data.records) {
                 let id = new String(data.records[i].$id.value);
 
+                console.log("[analyzer][getNameRecord] success : " + JSON.stringify(toneParams));
                 toneAnalyzer.tone(toneParams, function (error, toneAnalysis) {
                     if (error) {
-                        console.log(error);
+                        console.log("[analyzer][tone] error :" + error);
                     } else {
-                        console.log(JSON.stringify(toneAnalysis, null, 2));
+                        console.log("[analyzer][tone] JSON :" + JSON.stringify(toneAnalysis));
                         if (toneAnalysis.document_tone.tones.length != 0) {
                             updateTone(id, new String(toneAnalysis.document_tone.tones[0].tone_id));
                         }
