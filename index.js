@@ -68,7 +68,7 @@ function addUserName(id, name) {
 
     console.log("[addUserName] id:" + id + ", name:" + name);
 
-    kintone.updateRecord(Number(id), { "name": { "value": name } },
+    kintone.updateRecord(Number(id), { "name": { "value": name } }, 0,
         function (data) { console.log("[addUserName][sendRecord] success"); },
         function (data) { console.log("[addUserName][sendRecord] fail"); });
 }
@@ -110,7 +110,7 @@ function deleteTimerSuccess(data) {
         console.log(id + " : " + timerId);
         clearTimeout(timerId);
 
-        kintone.updateRecord(Number(id), { "timerId": { "value": "" }, "tone": { "value": "" } },
+        kintone.updateRecord(Number(id), { "timerId": { "value": "" }, "tone": { "value": "" } }, 0,
             function (data) { console.log("[deleteTimerSuccess][sendRecord] success"); },
             function (data) { console.log("[deleteTimerSuccess][sendRecord] error"); }
         );
@@ -124,7 +124,7 @@ function deleteUser(groupId, name) {
 
 function updateTimerId(id, timerId) {
 
-    kintone.updateRecord(Number(id), { "timerId": { "value": timerId } },
+    kintone.updateRecord(Number(id), { "timerId": { "value": timerId } }, 0,
         function (data) { console.log("[updateTimerId][sendRecord] success"); },
         function (data) { console.log("[updateTimerId][sendRecord] error"); });
 }

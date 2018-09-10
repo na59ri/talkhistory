@@ -23,7 +23,7 @@ function getNameRecord(groupId, name, successFunc, failFunc) {
 // recordId に対して、 name を更新
 function updateTone(id, tone) {
 
-    kintone.updateRecord(id, { "tone": { "value": tone } },
+    kintone.updateRecord(id, { "tone": { "value": tone } }, 0,
         function (data) { console.log("[updateTone][updateRecord] success"); },
         function (data) { console.log("[updateTone][updateRecord] error"); }
     );
