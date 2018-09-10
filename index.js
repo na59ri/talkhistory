@@ -86,7 +86,7 @@ function addUserArray(groupId, userId) {
 
                 getIdRecord(sGroupId, sUserId, function (data) {
                     console.log("[addUserArray][getIdRecord] success");
-                    if (data.totalCount) {
+                    if (data.totalCount != null) {
                         for (let i in data.records) {
                             let id = String(data.records[i].record_id.value);
                             addUserName(id, sDisplayName);
