@@ -58,7 +58,7 @@ function addUser(groupId, userId, name) {
     console.log("[addUser] userId:" + userId + ", name:" + name);
 
     kintone.addRecord(
-        { "record": { "groupId": { "value": groupId }, "userId": { "value": userId }, "name": { "value": name } } },
+        { "groupId": { "value": groupId }, "userId": { "value": userId }, "name": { "value": name } },
         function (data) { console.log("[addUser][sendRecord] success"); },
         function (data) { console.log("[addUser][sendRecord] fail"); });
 }
