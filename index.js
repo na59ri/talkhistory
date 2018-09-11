@@ -205,8 +205,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // イベントオブジェクトを順次処理。
     req.body.events.forEach((event) => {
 
-
-        console.log("[all]]" + JSON.stringify(event));
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text") {
 
@@ -234,7 +232,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         // text: result[1]
-                        text: "テスト中です、すまそ"
+                        text: "最速で催促！とぅ！！！"
                     }));
                 }
             }
