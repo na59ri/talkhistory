@@ -13,8 +13,8 @@ const line_config = {
     channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 };
 
-// 返信までの時間(10 min)
-const TIMEOUT = 10 * 1000;
+// 返信までの時間(10 sec)
+const TIMEOUT = 5 * 60 * 1000;
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config);
