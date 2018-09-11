@@ -129,6 +129,7 @@ function updateTimerId(id, timerId) {
         function (data) { console.log("[updateTimerId][sendRecord] error"); });
 }
 
+
 // スタンプ
 function toneTypeReply(tone) {
     let text = "早く返信ちょうだい！早く早く";
