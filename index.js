@@ -105,9 +105,9 @@ function addUserArray(groupId, userId) {
 // UserのtimerId/toneを削除する
 function deleteTimerSuccess(data) {
     for (let i in data.records) {
-        let id = new String(data.records[i].$id.value);
-        let timerId = new String(data.records[i].timerId.value);
-        console.log(id + " : " + timerId);
+        let id = String(data.records[i].$id.value);
+        let timerId = Number(data.records[i].timerId.value);
+        console.log("[deleteTimerSuccess]" + id + " : " + timerId);
         clearTimeout(timerId);
 
         kintone.updateRecord(Number(id), { "timerId": { "value": "" }, "tone": { "value": "" } }, 0,
@@ -124,7 +124,7 @@ function deleteUser(groupId, name) {
 
 function updateTimerId(id, timerId) {
 
-    kintone.updateRecord(Number(id), { "timerId": { "value": timerId } }, 0,
+    kintone.updateRecord(Number(id), { "timerId": { "value": String(timerId) } }, 0,
         function (data) { console.log("[updateTimerId][sendRecord] success"); },
         function (data) { console.log("[updateTimerId][sendRecord] error"); });
 }
@@ -166,7 +166,9 @@ function sendStamp(recordId) {
                 text: toneTypeReply(String(data.record.tone.value))
             });
             if (data.record.timerId.value != "") {
-                updateTimerId(id, setTimeout(sendStamp(recordId), TIMEOUT));
+                updateTimerId(id, setTimeout(function () {
+                    sendStamp(recordId);
+                }, TIMEOUT));
             }
         }
     }, function () { console.log("[sendStamp] fail"); });
@@ -175,11 +177,13 @@ function sendStamp(recordId) {
 function updateUserSuccess(data) {
     for (let i in data.records) {
         let id = Number(data.records[i].$id.value);
-        let timerId = String(data.records[i].timerId.value);
+        let timerId = Number(data.records[i].timerId.value);
         console.log("[updateUserSuccess] : " + id + " : " + timerId);
 
-        if (!timerId) {
-            let newTimerId = setTimeout(sendStamp(id), TIMEOUT);
+        if (timerId == 0) {
+            let newTimerId = setTimeout(function () {
+                sendStamp(id);
+            }, TIMEOUT);
             console.log("[updateUserSuccess] update: " + newTimerId);
             updateTimerId(id, newTimerId);
 
