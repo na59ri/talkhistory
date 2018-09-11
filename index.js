@@ -165,7 +165,9 @@ function sendStamp(recordId) {
                 type: "text",
                 text: toneTypeReply(String(data.record.tone.value))
             });
-            updateTimerId(id, setTimeout(sendStamp(recordId), TIMEOUT));
+            if (data.record.timerId.value != "") {
+                updateTimerId(id, setTimeout(sendStamp(recordId), TIMEOUT));
+            }
         }
     }, function () { console.log("[sendStamp] fail"); });
 }
