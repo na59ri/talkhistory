@@ -205,6 +205,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // イベントオブジェクトを順次処理。
     req.body.events.forEach((event) => {
 
+
+        console.log("[beacon]" + JSON.stringify(event));
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text") {
 
