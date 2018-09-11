@@ -157,12 +157,11 @@ function sendStamp(recordId) {
         console.log("[sendStamp] success:" + JSON.stringify(data));
 
         if (data.record) {
-
-            bot.pushMessage(String(data.record.userId.value), {
-                type: "text",
-                text: toneTypeReply(String(data.record.tone.value))
-            });
             if (data.record.timerId.value != "") {
+                bot.pushMessage(String(data.record.userId.value), {
+                    type: "text",
+                    text: toneTypeReply(String(data.record.tone.value))
+                });
                 updateTimerId(id, setTimeout(function () {
                     sendStamp(recordId);
                 }, TIMEOUT));
