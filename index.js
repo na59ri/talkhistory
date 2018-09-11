@@ -106,9 +106,6 @@ function addUserArray(groupId, userId) {
 function deleteTimerSuccess(data) {
     for (let i in data.records) {
         let id = String(data.records[i].$id.value);
-        let timerId = Number(data.records[i].timerId.value);
-        console.log("[deleteTimerSuccess]" + id + " : " + timerId);
-        clearTimeout(timerId);
 
         kintone.updateRecord(Number(id), { "timerId": { "value": "" }, "tone": { "value": "" } }, 0,
             function (data) { console.log("[deleteTimerSuccess][sendRecord] success"); },
