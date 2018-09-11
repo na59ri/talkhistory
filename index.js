@@ -158,11 +158,11 @@ function sendStamp(recordId) {
     kintone.getRecord(id, function (data) {
         console.log("[sendStamp] success:" + JSON.stringify(data));
 
-        if (data.totalCount != 0) {
+        if (data.record) {
 
-            bot.pushMessage(String(data.records[0].userId.value), {
+            bot.pushMessage(String(data.record.userId.value), {
                 type: "text",
-                text: toneTypeReply(String(data.records[0].tone.value))
+                text: toneTypeReply(String(data.record.tone.value))
             });
             updateTimerId(id, setTimeout(sendStamp(recordId), TIMEOUT));
         }
