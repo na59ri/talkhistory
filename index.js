@@ -254,6 +254,12 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             //     packageId: event.message.packageId,
             //     stickerId: event.message.stickerId
             // });
+        } else if (event.type == "beacon") {
+            console.log("[beacon]" + JSON.stringify(event));
+            events_processed.push(bot.replyMessage(event.replyToken, {
+                type: "text",
+                text: "はまー参上！！！"
+            }));
         }
     });
 
