@@ -231,7 +231,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         // text: result[1]
-                        text: "最速で催促！とぅ！！！"
+                        text: "催促マン、出撃！とぅ！！！"
                     }));
                 }
             }
