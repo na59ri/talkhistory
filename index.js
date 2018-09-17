@@ -140,21 +140,9 @@ function updateTimerId(id, timerId) {
 
 // スタンプ
 function toneTypeReply(tone) {
-    let text = "早く返信ちょうだい！早く早く";
-    if (tone === 'anger') {
-        text = "はよ、返信しやがれ！";
-    } else if (tone === 'fear') {
-        text = "早く返信ほしいなあ";
-    } else if (tone === 'joy') {
-        text = "返信ようよ！";
-    } else if (tone === 'sadness') {
-        text = "お願いだから、返信して";
-    } else if (tone === 'analytical') {
-        text = "早く返信ちょうだい！";
-    } else if (tone === 'confident') {
-        text = "まじで、返信して";
-    } else if (tone === 'tentative') {
-        text = "えーーーと、返信ほしいなあ";
+    let text = "気づいているか？さぁ返信だ！";
+    if (replyArray[tone]) {
+        return replyArray[tone];
     }
 
     return text;
