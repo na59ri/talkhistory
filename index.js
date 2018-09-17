@@ -235,23 +235,23 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 }
             }
         } else if (event.type == "message" && event.message.type == "image") {
-            // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-            // events_processed.push(bot.replyMessage(event.replyToken, {
-            //     type: "text",
-            //     text: "まずい、もう１杯"
-            // }));
+            let groupId = String(event.source.groupId);
+            let userId = String(event.source.userId);
+
+            // groupリストにユーザーを登録
+            addUserArray(groupId, userId);
+
+            // ユーザーが一致したら、グループから削除
+            deleteUser(groupId, userId);
         } else if (event.type == "message" && event.message.type == "sticker") {
-            // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-            // events_processed.push(bot.replyMessage(event.replyToken, {
-            //     type: "sticker",
-            //     "packageId": event.message.packageId,
-            //     "stickerId": event.message.stickerId
-            // }));
-            // bot.pushMessage(event.source.userId, {
-            //     type: "sticker",
-            //     packageId: event.message.packageId,
-            //     stickerId: event.message.stickerId
-            // });
+            let groupId = String(event.source.groupId);
+            let userId = String(event.source.userId);
+
+            // groupリストにユーザーを登録
+            addUserArray(groupId, userId);
+
+            // ユーザーが一致したら、グループから削除
+            deleteUser(groupId, userId);
         } else if (event.type == "beacon") {
             if (event.beacon.type == "enter") {
                 console.log("[beacon][enter]" + JSON.stringify(event));
