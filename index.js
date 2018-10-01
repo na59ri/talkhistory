@@ -252,20 +252,20 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             // ユーザーが一致したら、グループから削除
             deleteUser(groupId, userId);
-        } else if (event.type == "beacon") {
-            if (event.beacon.type == "enter") {
-                console.log("[beacon][enter]" + JSON.stringify(event));
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: "はまー参上！！！"
-                }));
-            } else {
-                console.log("[beacon][enter]" + JSON.stringify(event));
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: "はまー離脱！！！"
-                }));
-            }
+            // } else if (event.type == "beacon") {
+            //     if (event.beacon.type == "enter") {
+            //         console.log("[beacon][enter]" + JSON.stringify(event));
+            //         events_processed.push(bot.replyMessage(event.replyToken, {
+            //             type: "text",
+            //             text: "はまー参上！！！"
+            //         }));
+            //     } else {
+            //         console.log("[beacon][enter]" + JSON.stringify(event));
+            //         events_processed.push(bot.replyMessage(event.replyToken, {
+            //             type: "text",
+            //             text: "はまー離脱！！！"
+            //         }));
+            //     }
         }
     });
 
