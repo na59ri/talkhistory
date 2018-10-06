@@ -52,8 +52,9 @@ function translatorJapanToEnglish(token, text) {
     const req = https.request(optionsTrans, (res) => {
         res.on('data', (chunk) => {
             console.log(`[translatorJapanToEnglish][source]: ` + postDataStr);
-            console.log(`[translatorJapanToEnglish]: ${chunk}` + "¥n test:" + chunk[0]["translations"]["text"]);
-            return chunk[0]["translations"]["text"];
+            console.log(`[translatorJapanToEnglish]: ${chunk}`);
+            console.log("[translatorJapanToEnglish][translate]:" + chunk[0]["translations"][0]["text"]);
+            return chunk[0]["translations"][0]["text"];
         });
     })
 
