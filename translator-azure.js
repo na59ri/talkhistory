@@ -27,7 +27,7 @@ async function translator(groupId, name, text, analyzer) {
     const req = https.request(options, (res) => {
         res.on('data', (chunk) => {
             console.log(`BODY: ${chunk}`);
-            analyzer(new String(groupId), new String(name), new String(translatorJapanToEnglish(chunk, text)));
+            analyzer(new String(groupId), new String(name), translatorJapanToEnglish(chunk, text));
         });
     })
 
@@ -57,7 +57,7 @@ function translatorJapanToEnglish(token, text) {
             let textArray = data[0].translations;
             for (let v of textArray) {
                 console.log("[translatorJapanToEnglish][translate]:" + v.text);
-                return v.text;
+                return new String(v.text);
             }
         });
     })
