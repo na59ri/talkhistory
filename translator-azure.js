@@ -3,7 +3,7 @@ const https = require('https');
 const options = {
     protocol: 'https:',
     host: 'api.cognitive.microsoft.com',
-    path: '/sts/v1.0',
+    path: '/sts/v1.0/issueToken',
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
