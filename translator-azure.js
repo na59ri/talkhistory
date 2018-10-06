@@ -40,11 +40,12 @@ async function translator(groupId, name, text, analyzer) {
 }
 
 function translatorJapanToEnglish(token, text) {
-    let postDataStr = JSON.stringify({ 'Text': text });
+    let postDataStr = JSON.stringify([{ 'Text': text }]);
+    const key = 'Bearer ' + token;
     let headers = {
         'api-version': 3.0,
         'to': 'en',
-        'Ocp-Apim-Subscription-Key': token
+        'Authorization': key
     };
     optionsTrans['headers'] = headers;
 
