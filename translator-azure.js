@@ -44,7 +44,7 @@ function translatorJapanToEnglish(token, text) {
     const key = 'Bearer ' + token;
     let headers = {
         'api-version': 3.0,
-        'to': 'en',
+        'To': 'en',
         'Content-Type': 'application/json',
         'Authorization': key
     };
