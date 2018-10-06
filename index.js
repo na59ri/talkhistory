@@ -2,7 +2,8 @@
 // モジュールのインポート
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
-const translator = require("./translator");
+// const translator = require("./translator");
+const translator = require("./translator_azure");
 const tone = require("./tone");
 const kintone = require("./kintone");
 
