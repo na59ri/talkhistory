@@ -54,8 +54,10 @@ function translatorJapanToEnglish(token, text) {
             console.log(`[translatorJapanToEnglish][source]: ` + postDataStr);
             console.log(`[translatorJapanToEnglish]: ${chunk}`);
             let textArray = chunk[0].translations;
-            console.log("[translatorJapanToEnglish][translate]:" + chunk[0].translations[0].text);
-            return chunk[0].translations[0].text;
+            for (let v of textArray) {
+                console.log("[translatorJapanToEnglish][translate]:" + v.text);
+                return v.text;
+            }
         });
     })
 
