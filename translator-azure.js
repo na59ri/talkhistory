@@ -53,7 +53,8 @@ function translatorJapanToEnglish(token, text) {
         res.on('data', (chunk) => {
             console.log(`[translatorJapanToEnglish][source]: ` + postDataStr);
             console.log(`[translatorJapanToEnglish]: ${chunk}`);
-            let textArray = chunk[0].translations;
+            data = JSON.parse(chunk);
+            let textArray = data[0].translations;
             for (let v of textArray) {
                 console.log("[translatorJapanToEnglish][translate]:" + v.text);
                 return v.text;
