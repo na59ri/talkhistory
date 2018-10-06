@@ -53,7 +53,7 @@ function translatorJapanToEnglish(token, text) {
         res.on('data', (chunk) => {
             console.log(`[translatorJapanToEnglish][source]: ` + postDataStr);
             console.log(`[translatorJapanToEnglish]: ${chunk}` + "¥n test:" + chunk[0]["detectedLanguage"]["translations"]["text"]);
-            return chunk[0]["detectedLanguage"]["translations"]["text"];
+            return chunk[0]["translations"]["text"];
         });
     })
 
