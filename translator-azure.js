@@ -48,9 +48,9 @@ function translatorJapanToEnglish(token, text) {
     };
     optionsTrans['headers'] = headers;
 
-    const req = https.request(options, (res) => {
+    const req = https.request(optionsTrans, (res) => {
         res.on('data', (chunk) => {
-            console.log(`BODY: ${chunk}`);
+            console.log(`[translatorJapanToEnglish]: ${chunk}`);
 
         });
     })
