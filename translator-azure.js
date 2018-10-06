@@ -12,6 +12,12 @@ const options = {
     }
 };
 
+var optionsTrans = {
+    protocol: 'https:',
+    host: 'api.cognitive.microsofttranslator.com',
+    path: '/translate?api-version=3.0',
+    method: 'GET'
+};
 
 module.exports.translator = translator;
 
@@ -21,9 +27,7 @@ async function translator(groupId, name, text, analyzer) {
     const req = https.request(options, (res) => {
         res.on('data', (chunk) => {
             console.log(`BODY: ${chunk}`);
-        });
-        res.on('end', () => {
-            console.log('No more data in response.');
+            analyzer(new String(groupId), new String(name), new String(translatorJapanToEnglish(chunk, text)));
         });
     })
 
@@ -32,5 +36,31 @@ async function translator(groupId, name, text, analyzer) {
     });
 
     req.end();
+
+}
+
+function translatorJapanToEnglish(token, text) {
+    let postDataStr = JSON.stringify({ 'text': text });
+    let headers = {
+        'api-version': 3.0,
+        'to': 'en',
+        'Ocp-Apim-Subscription-Key': token
+    };
+    optionsTrans['headers'] = headers;
+
+    const req = https.request(options, (res) => {
+        res.on('data', (chunk) => {
+            console.log(`BODY: ${chunk}`);
+
+        });
+    })
+
+    req.on('error', (e) => {
+        console.error(`problem with request: ${e.message}`);
+    });
+    req.write(postDataStr);
+    req.end();
+
+
 
 }
