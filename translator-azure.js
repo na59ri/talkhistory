@@ -16,7 +16,7 @@ var optionsTrans = {
     protocol: 'https:',
     host: 'api.cognitive.microsofttranslator.com',
     path: '/translate?api-version=3.0',
-    method: 'GET'
+    method: 'POST'
 };
 
 module.exports.translator = translator;
