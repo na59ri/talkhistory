@@ -40,7 +40,7 @@ async function translator(groupId, name, text, analyzer) {
 }
 
 function translatorJapanToEnglish(token, text) {
-    let postDataStr = JSON.stringify({ 'text': text });
+    let postDataStr = JSON.stringify({ 'Text': text });
     let headers = {
         'api-version': 3.0,
         'to': 'en',
@@ -50,6 +50,7 @@ function translatorJapanToEnglish(token, text) {
 
     const req = https.request(optionsTrans, (res) => {
         res.on('data', (chunk) => {
+            console.log(`[translatorJapanToEnglish][source]: ` + postDataStr);
             console.log(`[translatorJapanToEnglish]: ${chunk}`);
 
         });
