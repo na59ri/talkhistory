@@ -15,7 +15,7 @@ const options = {
 var optionsTrans = {
     protocol: 'https:',
     host: 'api.cognitive.microsofttranslator.com',
-    path: '/translate?api-version=3.0',
+    path: '/translate?api-version=3.0&to=en',
     method: 'POST'
 };
 
@@ -44,7 +44,6 @@ function translatorJapanToEnglish(token, text) {
     const key = 'Bearer ' + token;
     let headers = {
         'api-version': 3.0,
-        'to': 'to=en',
         'Content-Type': 'application/json',
         'Authorization': key
     };
