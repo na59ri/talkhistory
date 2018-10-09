@@ -36,14 +36,6 @@ const replyArray = {
     "tentative": "みんなが君の返信を待っている！さぁ返信しよう！"
 }
 
-// -----------------------------------------------------------------------------
-// ルーター設定
-// server.post('/webhook', line.middleware(line_config), (req, res, next) => {
-//     res.sendStatus(200);
-//     console.log(req.body);
-// });
-
-
 
 // groupId と userId を使って kintone から情報を取得
 function getIdRecord(groupId, userId, successFunc, failFunc) {
@@ -253,20 +245,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             // ユーザーが一致したら、グループから削除
             deleteUser(groupId, userId);
-            // } else if (event.type == "beacon") {
-            //     if (event.beacon.type == "enter") {
-            //         console.log("[beacon][enter]" + JSON.stringify(event));
-            //         events_processed.push(bot.replyMessage(event.replyToken, {
-            //             type: "text",
-            //             text: "はまー参上！！！"
-            //         }));
-            //     } else {
-            //         console.log("[beacon][enter]" + JSON.stringify(event));
-            //         events_processed.push(bot.replyMessage(event.replyToken, {
-            //             type: "text",
-            //             text: "はまー離脱！！！"
-            //         }));
-            //     }
         }
     });
 
